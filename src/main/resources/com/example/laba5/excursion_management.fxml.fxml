@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.laba5.ExcursionManagementController"
+            style="-fx-background-color: #ecf0f1;">
+
+    <top>
+        <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: #2c3e50;">
+            <Label text="Управление экскурсиями" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+            <Button text="Назад" onAction="#handleBack" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-pref-width: 100px;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="20" style="-fx-padding: 20;">
+            <!-- Форма добавления экскурсии -->
+            <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: white; -fx-border-radius: 5px;">
+                <Label text="Добавить новую экскурсию" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Место:" style="-fx-pref-width: 100px;"/>
+                    <TextField fx:id="placeField" promptText="Например: Минск" style="-fx-pref-width: 200px;"/>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="День:" style="-fx-pref-width: 100px;"/>
+                    <ComboBox fx:id="dayComboBox" style="-fx-pref-width: 200px;"/>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Время:" style="-fx-pref-width: 100px;"/>
+                    <ComboBox fx:id="timeComboBox" style="-fx-pref-width: 200px;"/>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Гид:" style="-fx-pref-width: 100px;"/>
+                    <ComboBox fx:id="guideComboBox" style="-fx-pref-width: 200px;"/>
+                </HBox>
+
+                <Button text="Добавить экскурсию" onAction="#handleAddExcursion"
+                        style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-pref-width: 200px;"/>
+            </VBox>
+
+            <!-- Список экскурсий -->
+            <VBox spacing="10">
+                <Label text="Список экскурсий" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+                <TableView fx:id="excursionsTable" style="-fx-pref-height: 300px;">
+                    <columns>
+                        <TableColumn prefWidth="150" text="Место">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="place" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="100" text="День">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="dayType" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="100" text="Время">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="timeOfDay" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="100" text="Гид">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="guideLevel" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="100" text="Стоимость"/>
+                        <TableColumn prefWidth="150" text="Действия"/>
+                    </columns>
+                </TableView>
+            </VBox>
+        </VBox>
+    </center>
+
+</BorderPane>

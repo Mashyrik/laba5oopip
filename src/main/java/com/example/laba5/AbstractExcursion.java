@@ -15,21 +15,11 @@ public abstract class AbstractExcursion implements Serializable {
         this.guideLevel = guideLevel;
     }
 
-    public String getPlace() {
-        return place;
-    }
-
-    public String getDayType() {
-        return dayType;
-    }
-
-    public String getTimeOfDay() {
-        return timeOfDay;
-    }
-
-    public String getGuideLevel() {
-        return guideLevel;
-    }
+    // Геттеры
+    public String getPlace() { return place; }
+    public String getDayType() { return dayType; }
+    public String getTimeOfDay() { return timeOfDay; }
+    public String getGuideLevel() { return guideLevel; }
 
     public abstract void displayDetails();
 }

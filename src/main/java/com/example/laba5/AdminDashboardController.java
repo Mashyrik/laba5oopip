@@ -14,23 +14,37 @@ public class AdminDashboardController {
     @FXML private Label welcomeLabel;
 
     private UserManager userManager = UserManager.getInstance();
+    private ExcursionStudio studio = new ExcursionStudio();
 
     @FXML
     private void initialize() {
-        System.out.println("✅ AdminDashboardController инициализирован!");
+        studio.loadFromFile();
         if (userManager.getCurrentUser() != null) {
             welcomeLabel.setText("Добро пожаловать, " + userManager.getCurrentUser().getUsername() + "!");
         }
+        System.out.println("Загружено экскурсий: " + studio.getExcursions().size());
     }
 
     @FXML
     private void handleExcursions() {
-        showAlert("Управление экскурсиями", "Здесь будет управление экскурсиями");
+        try {
+            // Переходим к управлению экскурсиями
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/excursion_management.fxml.fxml"));
+            Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+            stage.setScene(new Scene(root, 800, 600));
+
+        } catch (Exception e) {
+            showAlert(AlertType.ERROR, "Ошибка", "Не удалось открыть управление экскурсиями: " + e.getMessage());
+        }
     }
 
     @FXML
     private void handleUsers() {
-        showAlert("Управление пользователями", "Здесь будет управление пользователями");
+        showAlert(AlertType.INFORMATION, "Управление пользователями",
+                "Здесь будет управление пользователями:\n" +
+                        "• Блокировка пользователей\n" +
+                        "• Разблокировка пользователей\n" +
+                        "• Просмотр всех пользователей");
     }
 
     @FXML
@@ -41,12 +55,12 @@ public class AdminDashboardController {
             Stage stage = (Stage) welcomeLabel.getScene().getWindow();
             stage.setScene(new Scene(root, 600, 400));
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert(AlertType.ERROR, "Ошибка", "Не удалось выйти: " + e.getMessage());
         }
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(AlertType.INFORMATION);
+    private void showAlert(AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
