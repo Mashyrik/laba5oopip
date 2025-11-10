@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.laba5.LoginController"
+            style="-fx-background-color: #ecf0f1;">
+
+    <center>
+        <VBox alignment="CENTER" spacing="20">
+            <Label text="Экскурсионная студия" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+            <Label text="Вход в систему" style="-fx-font-size: 16px; -fx-text-fill: #7f8c8d;"/>
+
+            <VBox alignment="CENTER" spacing="15" style="-fx-padding: 30px; -fx-background-color: white; -fx-border-radius: 10px;">
+                <TextField fx:id="usernameField" promptText="Введите логин" style="-fx-pref-width: 250px; -fx-pref-height: 35px;"/>
+                <PasswordField fx:id="passwordField" promptText="Введите пароль" style="-fx-pref-width: 250px; -fx-pref-height: 35px;"/>
+
+                <HBox spacing="10" alignment="CENTER">
+                    <Button text="Войти" onAction="#handleLogin"
+                            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-pref-width: 120px; -fx-pref-height: 35px;"/>
+                    <Button text="Регистрация" onAction="#handleRegister"
+                            style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-pref-width: 120px; -fx-pref-height: 35px;"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </center>
+
+    <padding>
+        <Insets top="50.0" right="50.0" bottom="50.0" left="50.0"/>
+    </padding>
+
+</BorderPane>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="RegisterController" styleClass="login-pane">
+    <center>
+        <VBox alignment="CENTER" spacing="20">
+            <VBox alignment="CENTER">
+                <Label text="Регистрация" styleClass="title-label"/>
+                <Label text="Создание новой учетной записи" styleClass="subtitle-label"/>
+            </VBox>
+
+            <VBox alignment="CENTER" spacing="15" styleClass="form-container">
+                <TextField fx:id="usernameField" promptText="Введите логин" styleClass="form-field"/>
+                <PasswordField fx:id="passwordField" promptText="Введите пароль" styleClass="form-field"/>
+                <PasswordField fx:id="confirmPasswordField" promptText="Подтвердите пароль" styleClass="form-field"/>
+
+                <HBox spacing="10" alignment="CENTER">
+                    <Button text="Зарегистрироваться" onAction="#handleRegister" styleClass="primary-button" defaultButton="true"/>
+                    <Button text="Назад" onAction="#handleBackToLogin" styleClass="secondary-button"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </center>
+    <padding>
+        <Insets top="50.0" right="50.0" bottom="50.0" left="50.0"/>
+    </padding>
+</BorderPane>
