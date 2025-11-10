@@ -15,10 +15,13 @@ public class User implements Serializable {
         this.blocked = false;
     }
 
+    // Геттеры
     public String getUsername() { return username; }
     public String getPassword() { return password; }
     public UserRole getRole() { return role; }
     public boolean isBlocked() { return blocked; }
+
+    // Сеттеры
     public void setBlocked(boolean blocked) { this.blocked = blocked; }
 
     public boolean isAdmin() {
