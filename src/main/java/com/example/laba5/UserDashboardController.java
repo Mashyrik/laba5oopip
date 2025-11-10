@@ -17,7 +17,6 @@ public class UserDashboardController {
 
     @FXML
     private void initialize() {
-        System.out.println("✅ UserDashboardController инициализирован!");
         if (userManager.getCurrentUser() != null) {
             welcomeLabel.setText("Добро пожаловать, " + userManager.getCurrentUser().getUsername() + "!");
         }
@@ -25,12 +24,22 @@ public class UserDashboardController {
 
     @FXML
     private void handleViewExcursions() {
-        showAlert("Просмотр экскурсий", "Здесь будет просмотр экскурсий");
+        try {
+            // Переходим к просмотру экскурсий
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/user_excursions.fxml"));
+            Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+            stage.setScene(new Scene(root, 900, 600));
+
+        } catch (Exception e) {
+            showAlert(AlertType.ERROR, "Ошибка", "Не удалось открыть просмотр экскурсий: " + e.getMessage());
+        }
     }
 
     @FXML
     private void handleCalculateCost() {
-        showAlert("Расчет стоимости", "Здесь будет расчет стоимости");
+        showAlert(AlertType.INFORMATION, "Расчет стоимости",
+                "Функция расчета стоимости доступна в разделе 'Просмотр экскурсий'\n\n" +
+                        "Перейдите в раздел просмотра для расчета стоимости конкретных экскурсий");
     }
 
     @FXML
@@ -41,12 +50,12 @@ public class UserDashboardController {
             Stage stage = (Stage) welcomeLabel.getScene().getWindow();
             stage.setScene(new Scene(root, 600, 400));
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert(AlertType.ERROR, "Ошибка", "Не удалось выйти: " + e.getMessage());
         }
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(AlertType.INFORMATION);
+    private void showAlert(AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);

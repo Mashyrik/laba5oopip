@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.laba5.UserExcursionsController"
+            style="-fx-background-color: #ecf0f1;">
+
+    <top>
+        <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: #3498db;">
+            <Label text="Просмотр экскурсий" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+            <Button text="Назад" onAction="#handleBack" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-pref-width: 100px;"/>
+        </VBox>
+    </top>
+
+    <left>
+        <VBox spacing="15" style="-fx-padding: 20; -fx-pref-width: 250px;">
+            <!-- Фильтры -->
+            <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: white; -fx-border-radius: 5px;">
+                <Label text="Фильтры" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #3498db;"/>
+
+                <Label text="День:" style="-fx-font-weight: bold;"/>
+                <ComboBox fx:id="dayFilterComboBox" style="-fx-pref-width: 200px;"/>
+
+                <Label text="Квалификация гида:" style="-fx-font-weight: bold;"/>
+                <ComboBox fx:id="guideFilterComboBox" style="-fx-pref-width: 200px;"/>
+
+                <Button text="Применить фильтры" onAction="#handleApplyFilters"
+                        style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-pref-width: 200px;"/>
+                <Button text="Сбросить фильтры" onAction="#handleResetFilters"
+                        style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-pref-width: 200px;"/>
+            </VBox>
+
+            <!-- Сортировка -->
+            <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: white; -fx-border-radius: 5px;">
+                <Label text="Сортировка" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #9b59b6;"/>
+
+                <Button text="По возрастанию (Runnable)" onAction="#handleSortAscending"
+                        style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-pref-width: 200px;"/>
+                <Button text="По убыванию (Thread)" onAction="#handleSortDescending"
+                        style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-pref-width: 200px;"/>
+            </VBox>
+
+            <!-- Расчет стоимости -->
+            <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: white; -fx-border-radius: 5px;">
+                <Label text="Расчет стоимости" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+
+                <Label fx:id="costLabel" text="Выберите экскурсию"
+                       style="-fx-font-size: 14px; -fx-text-fill: #2c3e50; -fx-wrap-text: true;"/>
+
+                <Button text="Рассчитать стоимость" onAction="#handleCalculateCost"
+                        style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-pref-width: 200px;"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <center>
+        <VBox spacing="10" style="-fx-padding: 20;">
+            <Label text="Доступные экскурсии" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <TableView fx:id="excursionsTable" style="-fx-pref-height: 500px;">
+                <columns>
+                    <TableColumn prefWidth="150" text="Место">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="place" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn prefWidth="100" text="День">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="dayType" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn prefWidth="100" text="Время">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="timeOfDay" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn prefWidth="100" text="Гид">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="guideLevel" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn prefWidth="100" text="Стоимость"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+</BorderPane>
