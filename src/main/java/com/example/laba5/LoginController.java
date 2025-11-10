@@ -21,7 +21,6 @@ public class LoginController {
     private void initialize() {
         System.out.println("✅ LoginController инициализирован!");
     }
-
     @FXML
     private void handleLogin() {
         String username = usernameField.getText().trim();
@@ -29,33 +28,49 @@ public class LoginController {
 
         System.out.println("Попытка входа: " + username + "/" + password);
 
-        // Валидация
         if (username.isEmpty() || password.isEmpty()) {
             showAlert(AlertType.ERROR, "Ошибка", "Заполните все поля");
             return;
         }
 
-        // Настоящая аутентификация
         if (userManager.login(username, password)) {
             User currentUser = userManager.getCurrentUser();
             System.out.println("✅ Успешный вход! Пользователь: " + currentUser.getUsername());
-            System.out.println("Роль: " + currentUser.getRole());
 
-            showAlert(AlertType.INFORMATION, "Успех",
-                    "Добро пожаловать, " + currentUser.getUsername() + "!\n" +
-                            "Ваша роль: " + (currentUser.isAdmin() ? "Администратор" : "Пользователь"));
+            try {
+                String fxmlFile = currentUser.isAdmin()
+                        ? "/com/example/laba5/admin_dashboard.fxml"
+                        : "/com/example/laba5/user_dashboard.fxml";
 
-            // Очищаем поля после успешного входа
-            usernameField.clear();
-            passwordField.clear();
+                System.out.println("Пытаемся загрузить: " + fxmlFile);
+
+                // ДИАГНОСТИКА - проверяем существует ли файл
+                java.net.URL fxmlUrl = getClass().getResource(fxmlFile);
+                System.out.println("URL файла: " + fxmlUrl);
+
+                if (fxmlUrl == null) {
+                    System.out.println("❌ Файл не найден! Проверь путь: " + fxmlFile);
+                    showAlert(AlertType.ERROR, "Ошибка",
+                            "Файл " + fxmlFile + " не найден!\n\n" +
+                                    "Убедись что файл лежит в:\n" +
+                                    "src/main/resources/com/example/laba5/");
+                    return;
+                }
+
+                System.out.println("✅ Файл найден, загружаем...");
+                Parent root = FXMLLoader.load(fxmlUrl);
+                Stage stage = (Stage) usernameField.getScene().getWindow();
+                stage.setScene(new Scene(root, 800, 600));
+                stage.setTitle(currentUser.isAdmin() ? "Панель администратора" : "Панель пользователя");
+
+            } catch (Exception e) {
+                System.out.println("❌ Ошибка загрузки: " + e.getMessage());
+                e.printStackTrace();
+                showAlert(AlertType.ERROR, "Ошибка", "Ошибка загрузки: " + e.getMessage());
+            }
 
         } else {
-            System.out.println("❌ Ошибка входа");
-            showAlert(AlertType.ERROR, "Ошибка входа",
-                    "Неверный логин или пароль\n\n" +
-                            "Тестовые данные:\n" +
-                            "Админ - admin/admin123\n" +
-                            "Пользователь - user/user123");
+            showAlert(AlertType.ERROR, "Ошибка входа", "Неверный логин или пароль");
         }
     }
 
