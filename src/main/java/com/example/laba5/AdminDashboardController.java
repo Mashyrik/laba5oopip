@@ -14,7 +14,7 @@ public class AdminDashboardController {
     @FXML private Label welcomeLabel;
 
     private UserManager userManager = UserManager.getInstance();
-    private ExcursionStudio studio = new ExcursionStudio();
+    private ExcursionStudio studio = ExcursionStudio.getInstance();
 
     @FXML
     private void initialize() {
@@ -28,12 +28,26 @@ public class AdminDashboardController {
     @FXML
     private void handleExcursions() {
         try {
-            // Переходим к управлению экскурсиями
-            Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/excursion_management.fxml.fxml"));
+            System.out.println("Пытаемся загрузить excursion_management.fxml...");
+
+            // Проверяем существование файла
+            java.net.URL fxmlUrl = getClass().getResource("/com/example/laba5/excursion_management.fxml");
+            System.out.println("URL файла: " + fxmlUrl);
+
+            if (fxmlUrl == null) {
+                System.out.println("❌ Файл не найден! Проверь путь.");
+                showAlert(AlertType.ERROR, "Ошибка", "Файл excursion_management.fxml не найден!");
+                return;
+            }
+
+            System.out.println("✅ Файл найден, загружаем...");
+            Parent root = FXMLLoader.load(fxmlUrl);
             Stage stage = (Stage) welcomeLabel.getScene().getWindow();
             stage.setScene(new Scene(root, 800, 600));
 
         } catch (Exception e) {
+            System.out.println("❌ Ошибка загрузки: " + e.getMessage());
+            e.printStackTrace();
             showAlert(AlertType.ERROR, "Ошибка", "Не удалось открыть управление экскурсиями: " + e.getMessage());
         }
     }

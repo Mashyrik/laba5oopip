@@ -7,8 +7,8 @@ public class DeleteExcursionCommand implements AdminCommand {
     private int index;
     private AbstractExcursion deletedExcursion;
 
-    public DeleteExcursionCommand(ExcursionStudio studio, int index) {
-        this.studio = studio;
+    public DeleteExcursionCommand(int index) {
+        this.studio = ExcursionStudio.getInstance(); // Используем Singleton
         this.index = index;
     }
 

@@ -19,7 +19,7 @@ public class ExcursionManagementController {
     @FXML private ComboBox<String> guideComboBox;
     @FXML private TableView<Excursion> excursionsTable;
 
-    private ExcursionStudio studio = new ExcursionStudio();
+    private ExcursionStudio studio = ExcursionStudio.getInstance();
     private ObservableList<Excursion> excursionsData;
 
     @FXML
@@ -162,11 +162,13 @@ public class ExcursionManagementController {
     @FXML
     private void handleBack() {
         try {
+            // ИСПРАВЛЕННЫЙ ПУТЬ
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/admin_dashboard.fxml"));
             Stage stage = (Stage) placeField.getScene().getWindow();
             stage.setScene(new Scene(root, 800, 600));
         } catch (Exception e) {
             showAlert(AlertType.ERROR, "Ошибка", "Не удалось вернуться: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

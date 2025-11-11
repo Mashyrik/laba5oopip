@@ -6,11 +6,10 @@ public class AddExcursionCommand implements AdminCommand {
     private ExcursionStudio studio;
     private AbstractExcursion excursion;
 
-    public AddExcursionCommand(ExcursionStudio studio, AbstractExcursion excursion) {
-        this.studio = studio;
+    public AddExcursionCommand(AbstractExcursion excursion) {
+        this.studio = ExcursionStudio.getInstance(); // Используем Singleton
         this.excursion = excursion;
     }
-
     @Override
     public boolean execute() {
         studio.addExcursion(excursion);

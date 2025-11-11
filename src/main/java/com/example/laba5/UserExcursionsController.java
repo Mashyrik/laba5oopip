@@ -24,7 +24,7 @@ public class UserExcursionsController {
     @FXML private ComboBox<String> guideFilterComboBox;
     @FXML private Label costLabel;
 
-    private ExcursionStudio studio = new ExcursionStudio();
+    private ExcursionStudio studio = ExcursionStudio.getInstance(); // Используем Singleton
     private ObservableList<Excursion> excursionsData;
 
     // Добавляем поля для управления сортировкой
@@ -80,6 +80,7 @@ public class UserExcursionsController {
                 excursionsData.add((Excursion) abstractExcursion);
             }
         }
+        System.out.println("Пользователь: Загружено экскурсий в таблицу: " + excursionsData.size());
         applyFilters(); // Применяем текущие фильтры
     }
 
