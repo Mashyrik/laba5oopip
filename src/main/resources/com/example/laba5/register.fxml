@@ -2,31 +2,35 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="RegisterController" styleClass="login-pane">
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.laba5.RegisterController"
+            style="-fx-background-color: #ecf0f1;">
+
     <center>
         <VBox alignment="CENTER" spacing="20">
-            <VBox alignment="CENTER">
-                <Label text="Регистрация" styleClass="title-label"/>
-                <Label text="Создание новой учетной записи" styleClass="subtitle-label"/>
-            </VBox>
+            <Label text="Экскурсионная студия" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+            <Label text="Регистрация" style="-fx-font-size: 18px; -fx-text-fill: #7f8c8d;"/>
 
-            <VBox alignment="CENTER" spacing="15" styleClass="form-container">
-                <TextField fx:id="usernameField" promptText="Введите логин" styleClass="form-field"/>
-                <PasswordField fx:id="passwordField" promptText="Введите пароль" styleClass="form-field"/>
-                <PasswordField fx:id="confirmPasswordField" promptText="Подтвердите пароль" styleClass="form-field"/>
+            <VBox alignment="CENTER" spacing="15" style="-fx-padding: 30px; -fx-background-color: white; -fx-border-radius: 10px;">
+                <TextField fx:id="usernameField" promptText="Введите логин" style="-fx-pref-width: 250px; -fx-pref-height: 35px;"/>
+                <PasswordField fx:id="passwordField" promptText="Введите пароль" style="-fx-pref-width: 250px; -fx-pref-height: 35px;"/>
+                <PasswordField fx:id="confirmPasswordField" promptText="Подтвердите пароль" style="-fx-pref-width: 250px; -fx-pref-height: 35px;"/>
 
                 <HBox spacing="10" alignment="CENTER">
-                    <Button text="Зарегистрироваться" onAction="#handleRegister" styleClass="primary-button" defaultButton="true"/>
-                    <Button text="Назад" onAction="#handleBackToLogin" styleClass="secondary-button"/>
+                    <Button text="Зарегистрироваться" onAction="#handleRegister"
+                            style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-pref-width: 150px; -fx-pref-height: 35px;"/>
+                    <Button text="Назад" onAction="#handleBackToLogin"
+                            style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-pref-width: 100px; -fx-pref-height: 35px;"/>
                 </HBox>
             </VBox>
         </VBox>
     </center>
+
     <padding>
         <Insets top="50.0" right="50.0" bottom="50.0" left="50.0"/>
     </padding>
+
 </BorderPane>

@@ -21,6 +21,7 @@ public class LoginController {
     private void initialize() {
         System.out.println("✅ LoginController инициализирован!");
     }
+
     @FXML
     private void handleLogin() {
         String username = usernameField.getText().trim();
@@ -44,21 +45,7 @@ public class LoginController {
 
                 System.out.println("Пытаемся загрузить: " + fxmlFile);
 
-                // ДИАГНОСТИКА - проверяем существует ли файл
-                java.net.URL fxmlUrl = getClass().getResource(fxmlFile);
-                System.out.println("URL файла: " + fxmlUrl);
-
-                if (fxmlUrl == null) {
-                    System.out.println("❌ Файл не найден! Проверь путь: " + fxmlFile);
-                    showAlert(AlertType.ERROR, "Ошибка",
-                            "Файл " + fxmlFile + " не найден!\n\n" +
-                                    "Убедись что файл лежит в:\n" +
-                                    "src/main/resources/com/example/laba5/");
-                    return;
-                }
-
-                System.out.println("✅ Файл найден, загружаем...");
-                Parent root = FXMLLoader.load(fxmlUrl);
+                Parent root = FXMLLoader.load(getClass().getResource(fxmlFile));
                 Stage stage = (Stage) usernameField.getScene().getWindow();
                 stage.setScene(new Scene(root, 800, 600));
                 stage.setTitle(currentUser.isAdmin() ? "Панель администратора" : "Панель пользователя");
@@ -76,11 +63,16 @@ public class LoginController {
 
     @FXML
     private void handleRegister() {
-        showAlert(AlertType.INFORMATION, "Регистрация",
-                "Функция регистрации будет добавлена в следующем шаге\n\n" +
-                        "Пока используйте тестовые аккаунты:\n" +
-                        "• admin / admin123\n" +
-                        "• user / user123");
+        try {
+            System.out.println("Переход к регистрации...");
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/register.fxml"));
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            stage.setScene(new Scene(root, 600, 450));
+            stage.setTitle("Регистрация");
+        } catch (Exception e) {
+            System.out.println("❌ Ошибка загрузки формы регистрации: " + e.getMessage());
+            showAlert(AlertType.ERROR, "Ошибка", "Не удалось открыть форму регистрации: " + e.getMessage());
+        }
     }
 
     private void showAlert(AlertType type, String title, String message) {

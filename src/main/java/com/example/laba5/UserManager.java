@@ -28,11 +28,13 @@ public class UserManager implements Serializable {
         // Проверяем, нет ли уже такого пользователя
         for (User user : users) {
             if (user.getUsername().equals(username)) {
+                System.out.println("❌ Регистрация failed: пользователь " + username + " уже существует");
                 return false;
             }
         }
 
         users.add(new User(username, password, role));
+        System.out.println("✅ Новый пользователь зарегистрирован: " + username + " (роль: " + role + ")");
         return true;
     }
 

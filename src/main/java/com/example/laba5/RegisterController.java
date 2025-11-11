@@ -8,7 +8,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class RegisterController {
@@ -58,7 +57,7 @@ public class RegisterController {
         }
 
         if (userManager.register(username, password, UserRole.USER)) {
-            showAlert(AlertType.INFORMATION, "Успех", "Регистрация прошла успешно!");
+            showAlert(AlertType.INFORMATION, "Успех", "Регистрация прошла успешно!\nТеперь вы можете войти в систему.");
             handleBackToLogin();
         } else {
             showAlert(AlertType.ERROR, "Ошибка", "Пользователь с таким логином уже существует");
@@ -68,17 +67,12 @@ public class RegisterController {
     @FXML
     private void handleBackToLogin() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/login.fxml"));
-            Parent root = loader.load();
-
+            // ИСПРАВЛЕННЫЙ ПУТЬ
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/login.fxml"));
             Stage stage = (Stage) usernameField.getScene().getWindow();
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
-            stage.setScene(scene);
-            stage.centerOnScreen();
-
+            stage.setScene(new Scene(root, 600, 400));
         } catch (Exception e) {
-            showAlert(AlertType.ERROR, "Ошибка", "Не удалось вернуться к входу");
+            showAlert(AlertType.ERROR, "Ошибка", "Не удалось вернуться к входу: " + e.getMessage());
         }
     }
 
@@ -87,10 +81,6 @@ public class RegisterController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
-
-        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
-
         alert.showAndWait();
     }
 }
