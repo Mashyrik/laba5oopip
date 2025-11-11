@@ -46,13 +46,12 @@ public class ExcursionStudio implements Serializable {
     public List<AbstractExcursion> getFilteredExcursions() {
         return new ArrayList<>(excursions);
     }
-
     public synchronized void applySortedExcursions(List<AbstractExcursion> sortedList, boolean ascending) {
         this.excursions = new ArrayList<>(sortedList);
         saveToFile();
-        System.out.println("Сортировка применена (" + (ascending ? "по возрастанию" : "по убыванию") + ")");
+        System.out.println("Сортировка применена (" + (ascending ? "по возрастанию" : "по убыванию") +
+                "), сохранено " + excursions.size() + " экскурсий");
     }
-
     public void reapplySort() {
         saveToFile();
         System.out.println("Пересортировка выполнена");

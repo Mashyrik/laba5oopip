@@ -14,6 +14,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserExcursionsController {
 
@@ -24,6 +26,10 @@ public class UserExcursionsController {
 
     private ExcursionStudio studio = new ExcursionStudio();
     private ObservableList<Excursion> excursionsData;
+
+    // Добавляем поля для управления сортировкой
+    private SortTask ascendingTask = null;
+    private SortThread descendingThread = null;
 
     @FXML
     private void initialize() {
@@ -111,15 +117,87 @@ public class UserExcursionsController {
     @FXML
     private void handleSortAscending() {
         // Сортировка по возрастанию через Runnable
-        showAlert(AlertType.INFORMATION, "Сортировка", "Сортировка по возрастанию применена");
-        // Здесь можно добавить вызов SortTask
+        List<AbstractExcursion> filtered = getCurrentFilteredExcursions();
+        if (filtered.isEmpty()) {
+            showAlert(AlertType.WARNING, "Сортировка", "Нет экскурсий для сортировки");
+            return;
+        }
+
+        System.out.println("Сортировка по возрастанию (Runnable) для " + filtered.size() + " экскурсий");
+
+        ascendingTask = new SortTask(filtered, true, studio);
+        Thread runnableThread = new Thread(ascendingTask, "Ascending-Runnable-Thread");
+        runnableThread.start();
+
+        // Обновляем данные после сортировки
+        new Thread(() -> {
+            try {
+                runnableThread.join(); // Ждем завершения сортировки
+                javafx.application.Platform.runLater(() -> {
+                    loadExcursionsData(); // Обновляем интерфейс в UI потоке
+                    showAlert(AlertType.INFORMATION, "Сортировка",
+                            "Сортировка по возрастанию завершена!\nОтсортировано " + filtered.size() + " экскурсий");
+                    ascendingTask = null; // Сбрасываем ссылку после завершения
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     @FXML
     private void handleSortDescending() {
         // Сортировка по убыванию через Thread
-        showAlert(AlertType.INFORMATION, "Сортировка", "Сортировка по убыванию применена");
-        // Здесь можно добавить вызов SortThread
+        List<AbstractExcursion> filtered = getCurrentFilteredExcursions();
+        if (filtered.isEmpty()) {
+            showAlert(AlertType.WARNING, "Сортировка", "Нет экскурсий для сортировки");
+            return;
+        }
+
+        System.out.println("Сортировка по убыванию (Thread) для " + filtered.size() + " экскурсий");
+
+        descendingThread = new SortThread(filtered, false, studio);
+        descendingThread.start();
+
+        // Обновляем данные после сортировки
+        new Thread(() -> {
+            try {
+                descendingThread.join(); // Ждем завершения сортировки
+                javafx.application.Platform.runLater(() -> {
+                    loadExcursionsData(); // Обновляем интерфейс в UI потоке
+                    showAlert(AlertType.INFORMATION, "Сортировка",
+                            "Сортировка по убыванию завершена!\nОтсортировано " + filtered.size() + " экскурсий");
+                    descendingThread = null; // Сбрасываем ссылку после завершения
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    @FXML
+    private void handleCancelSort() {
+        boolean anyCancelled = false;
+
+        if (ascendingTask != null) {
+            ascendingTask.cancel();
+            anyCancelled = true;
+            System.out.println("Сортировка по возрастанию отменена");
+        }
+
+        if (descendingThread != null && descendingThread.isAlive()) {
+            descendingThread.cancel();
+            anyCancelled = true;
+            System.out.println("Сортировка по убыванию отменена");
+        }
+
+        if (anyCancelled) {
+            showAlert(AlertType.INFORMATION, "Отмена сортировки",
+                    "Запрос на отмену всех сортировок отправлен");
+        } else {
+            showAlert(AlertType.INFORMATION, "Отмена сортировки",
+                    "Нет активных сортировок для отмены");
+        }
     }
 
     @FXML
@@ -144,6 +222,27 @@ public class UserExcursionsController {
         } catch (Exception e) {
             showAlert(AlertType.ERROR, "Ошибка", "Не удалось вернуться: " + e.getMessage());
         }
+    }
+
+    // Вспомогательный метод для получения текущих отфильтрованных экскурсий
+    private List<AbstractExcursion> getCurrentFilteredExcursions() {
+        List<AbstractExcursion> filtered = new ArrayList<>();
+        for (AbstractExcursion abstractExcursion : studio.getExcursions()) {
+            if (abstractExcursion instanceof Excursion) {
+                Excursion excursion = (Excursion) abstractExcursion;
+
+                String dayFilter = dayFilterComboBox.getValue();
+                String guideFilter = guideFilterComboBox.getValue();
+
+                boolean dayMatch = dayFilter.equals("Все") || excursion.getDayType().equals(dayFilter);
+                boolean guideMatch = guideFilter.equals("Все") || excursion.getGuideLevel().equals(guideFilter);
+
+                if (dayMatch && guideMatch) {
+                    filtered.add(excursion);
+                }
+            }
+        }
+        return filtered;
     }
 
     private void showAlert(AlertType type, String title, String message) {
