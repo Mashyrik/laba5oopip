@@ -27,7 +27,7 @@ public class UserExcursionsController {
     private ExcursionStudio studio = ExcursionStudio.getInstance();
     private ObservableList<Excursion> excursionsData;
     private ObservableList<Excursion> allExcursionsData;
-    private List<AbstractExcursion> originalOrder; // Сохраняем исходный порядок
+    private List<AbstractExcursion> originalOrder;
 
     private SortTask ascendingTask = null;
     private SortThread descendingThread = null;
@@ -35,7 +35,6 @@ public class UserExcursionsController {
     @FXML
     private void initialize() {
         studio.loadFromFile();
-        // СОХРАНЯЕМ ИСХОДНЫЙ ПОРЯДОК ЭКСКУРСИЙ
         originalOrder = new ArrayList<>(studio.getExcursions());
 
         initializeFilters();
@@ -55,22 +54,18 @@ public class UserExcursionsController {
     }
 
     private void initializeTable() {
+        // УБИРАЕМ КОЛОНКУ СТОИМОСТИ - оставляем только 4 колонки
         TableColumn<Excursion, String> placeColumn = (TableColumn<Excursion, String>) excursionsTable.getColumns().get(0);
         TableColumn<Excursion, String> dayColumn = (TableColumn<Excursion, String>) excursionsTable.getColumns().get(1);
         TableColumn<Excursion, String> timeColumn = (TableColumn<Excursion, String>) excursionsTable.getColumns().get(2);
         TableColumn<Excursion, String> guideColumn = (TableColumn<Excursion, String>) excursionsTable.getColumns().get(3);
-        TableColumn<Excursion, String> costColumn = (TableColumn<Excursion, String>) excursionsTable.getColumns().get(4);
 
         placeColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         dayColumn.setCellValueFactory(new PropertyValueFactory<>("dayType"));
         timeColumn.setCellValueFactory(new PropertyValueFactory<>("timeOfDay"));
         guideColumn.setCellValueFactory(new PropertyValueFactory<>("guideLevel"));
 
-        costColumn.setCellValueFactory(cellData -> {
-            Excursion excursion = cellData.getValue();
-            double cost = studio.calculateCost(excursion);
-            return new javafx.beans.property.SimpleStringProperty(String.format("%.2f BYN", cost));
-        });
+        // УБИРАЕМ КОЛОНКУ СТОИМОСТИ - она больше не нужна в таблице
 
         excursionsData = FXCollections.observableArrayList();
         allExcursionsData = FXCollections.observableArrayList();
@@ -81,7 +76,6 @@ public class UserExcursionsController {
     private void loadExcursionsData() {
         allExcursionsData.clear();
 
-        // ЗАГРУЖАЕМ ДАННЫЕ ИЗ ФАЙЛА (могут быть отсортированы)
         for (AbstractExcursion abstractExcursion : studio.getExcursions()) {
             if (abstractExcursion instanceof Excursion) {
                 allExcursionsData.add((Excursion) abstractExcursion);
@@ -105,17 +99,12 @@ public class UserExcursionsController {
         guideFilterComboBox.setValue("Все");
         costLabel.setText("Выберите экскурсию");
 
-        // ВОССТАНАВЛИВАЕМ ИСХОДНЫЙ ПОРЯДОК ИЗ ПАМЯТИ
         restoreOriginalOrder();
         System.out.println("✅ Фильтры сброшены. Восстановлен исходный порядок: " + excursionsData.size() + " экскурсий");
     }
 
-    // ВОССТАНОВЛЕНИЕ ИСХОДНОГО ПОРЯДКА
     private void restoreOriginalOrder() {
-        // Восстанавливаем исходный порядок в студии
         studio.applySortedExcursions(new ArrayList<>(originalOrder), true);
-
-        // Обновляем данные
         loadExcursionsData();
     }
 
@@ -227,7 +216,6 @@ public class UserExcursionsController {
             showAlert(AlertType.INFORMATION, "Отмена сортировки",
                     "Запрос на отмену многопоточных сортировок отправлен");
         } else {
-            // ЕСЛИ НЕТ АКТИВНЫХ СОРТИРОВОК, ВОССТАНАВЛИВАЕМ ИСХОДНЫЙ ПОРЯДОК
             restoreOriginalOrder();
             showAlert(AlertType.INFORMATION, "Отмена сортировки",
                     "Сортировка отменена. Восстановлен исходный порядок экскурсий");
