@@ -3,21 +3,20 @@ package com.example.laba5;
 import java.util.List;
 
 public class DeleteExcursionCommand implements AdminCommand {
-    private ExcursionStudio studio;
     private int index;
     private AbstractExcursion deletedExcursion;
 
     public DeleteExcursionCommand(int index) {
-        this.studio = ExcursionStudio.getInstance(); // Используем Singleton
         this.index = index;
     }
 
     @Override
     public boolean execute() {
-        List<AbstractExcursion> excursions = studio.getExcursions();
+        List<AbstractExcursion> excursions = ExcursionStudio.getInstance().getExcursions();
         if (index >= 0 && index < excursions.size()) {
             deletedExcursion = excursions.get(index);
             excursions.remove(index);
+            ExcursionStudio.getInstance().saveToFile();
             return true;
         }
         return false;
@@ -26,7 +25,7 @@ public class DeleteExcursionCommand implements AdminCommand {
     @Override
     public void undo() {
         if (deletedExcursion != null) {
-            studio.addExcursion(deletedExcursion);
+            ExcursionStudio.getInstance().addExcursion(deletedExcursion);
         }
     }
 }

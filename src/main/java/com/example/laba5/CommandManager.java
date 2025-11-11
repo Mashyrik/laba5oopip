@@ -12,14 +12,12 @@ public class CommandManager implements Serializable {
     private CommandManager() {
         commandHistory = new ArrayList<>();
         undoneCommands = new ArrayList<>();
+        loadFromFile(); // Загружаем при создании
     }
 
     public static synchronized CommandManager getInstance() {
         if (instance == null) {
-            instance = loadFromFile();
-            if (instance == null) {
-                instance = new CommandManager();
-            }
+            instance = new CommandManager();
         }
         return instance;
     }
@@ -29,6 +27,7 @@ public class CommandManager implements Serializable {
             commandHistory.add(command);
             undoneCommands.clear();
             saveToFile();
+            System.out.println("✅ Команда выполнена и сохранена: " + command.getClass().getSimpleName());
         }
     }
 
@@ -38,6 +37,7 @@ public class CommandManager implements Serializable {
             command.undo();
             undoneCommands.add(command);
             saveToFile();
+            System.out.println("✅ Команда отменена: " + command.getClass().getSimpleName());
         }
     }
 
@@ -47,6 +47,7 @@ public class CommandManager implements Serializable {
             command.execute();
             commandHistory.add(command);
             saveToFile();
+            System.out.println("✅ Команда повторена: " + command.getClass().getSimpleName());
         }
     }
 
@@ -58,21 +59,31 @@ public class CommandManager implements Serializable {
         return history;
     }
 
+    public void clearHistory() {
+        commandHistory.clear();
+        undoneCommands.clear();
+        saveToFile();
+    }
+
     private void saveToFile() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("commands.dat"))) {
             oos.writeObject(this);
+            System.out.println("✅ История команд сохранена: " + commandHistory.size() + " команд");
         } catch (IOException e) {
-            System.out.println("Ошибка сохранения команд: " + e.getMessage());
+            System.out.println("❌ Ошибка сохранения команд: " + e.getMessage());
         }
     }
 
     private static CommandManager loadFromFile() {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("commands.dat"))) {
-            return (CommandManager) ois.readObject();
+            CommandManager loaded = (CommandManager) ois.readObject();
+            System.out.println("✅ История команд загружена: " + loaded.commandHistory.size() + " команд");
+            return loaded;
         } catch (FileNotFoundException e) {
+            System.out.println("Файл команд не найден, будет создана новая история");
             return null;
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Ошибка загрузки команд: " + e.getMessage());
+            System.out.println("❌ Ошибка загрузки команд: " + e.getMessage());
             return null;
         }
     }
