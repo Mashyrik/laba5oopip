@@ -27,6 +27,7 @@ public class UserExcursionsController {
     private ExcursionStudio studio = ExcursionStudio.getInstance();
     private ObservableList<Excursion> excursionsData;
     private ObservableList<Excursion> allExcursionsData;
+    private List<AbstractExcursion> originalOrder; // Сохраняем исходный порядок
 
     private SortTask ascendingTask = null;
     private SortThread descendingThread = null;
@@ -34,6 +35,9 @@ public class UserExcursionsController {
     @FXML
     private void initialize() {
         studio.loadFromFile();
+        // СОХРАНЯЕМ ИСХОДНЫЙ ПОРЯДОК ЭКСКУРСИЙ
+        originalOrder = new ArrayList<>(studio.getExcursions());
+
         initializeFilters();
         initializeTable();
         loadExcursionsData();
@@ -71,30 +75,23 @@ public class UserExcursionsController {
         excursionsData = FXCollections.observableArrayList();
         allExcursionsData = FXCollections.observableArrayList();
 
-        // Устанавливаем данные в таблицу
         excursionsTable.setItems(excursionsData);
-
-        System.out.println("✅ Таблица инициализирована");
     }
 
     private void loadExcursionsData() {
         allExcursionsData.clear();
 
-        // Загружаем все экскурсии
+        // ЗАГРУЖАЕМ ДАННЫЕ ИЗ ФАЙЛА (могут быть отсортированы)
         for (AbstractExcursion abstractExcursion : studio.getExcursions()) {
             if (abstractExcursion instanceof Excursion) {
                 allExcursionsData.add((Excursion) abstractExcursion);
             }
         }
 
-        // ОБНОВЛЯЕМ ОСНОВНУЮ КОЛЛЕКЦИЮ
         excursionsData.setAll(allExcursionsData);
-
-        // ПРИНУДИТЕЛЬНО ОБНОВЛЯЕМ ТАБЛИЦУ
         excursionsTable.refresh();
 
         System.out.println("✅ Загружено экскурсий: " + excursionsData.size());
-        System.out.println("✅ Данные установлены в таблицу");
     }
 
     @FXML
@@ -108,10 +105,18 @@ public class UserExcursionsController {
         guideFilterComboBox.setValue("Все");
         costLabel.setText("Выберите экскурсию");
 
-        // ВОССТАНАВЛИВАЕМ ВСЕ ДАННЫЕ И ОБНОВЛЯЕМ ТАБЛИЦУ
-        excursionsData.setAll(allExcursionsData);
-        excursionsTable.refresh();
-        System.out.println("✅ Фильтры сброшены. Показано: " + excursionsData.size() + " экскурсий");
+        // ВОССТАНАВЛИВАЕМ ИСХОДНЫЙ ПОРЯДОК ИЗ ПАМЯТИ
+        restoreOriginalOrder();
+        System.out.println("✅ Фильтры сброшены. Восстановлен исходный порядок: " + excursionsData.size() + " экскурсий");
+    }
+
+    // ВОССТАНОВЛЕНИЕ ИСХОДНОГО ПОРЯДКА
+    private void restoreOriginalOrder() {
+        // Восстанавливаем исходный порядок в студии
+        studio.applySortedExcursions(new ArrayList<>(originalOrder), true);
+
+        // Обновляем данные
+        loadExcursionsData();
     }
 
     private void applyFilters() {
@@ -121,7 +126,6 @@ public class UserExcursionsController {
         if ("Все".equals(dayFilter) && "Все".equals(guideFilter)) {
             excursionsData.setAll(allExcursionsData);
             excursionsTable.refresh();
-            System.out.println("✅ Показаны все экскурсии: " + excursionsData.size());
             return;
         }
 
@@ -136,24 +140,22 @@ public class UserExcursionsController {
             }
         }
 
-        // УСТАНАВЛИВАЕМ ОТФИЛЬТРОВАННЫЕ ДАННЫЕ И ОБНОВЛЯЕМ
         excursionsData.setAll(filteredData);
         excursionsTable.refresh();
-
-        System.out.println("✅ Применены фильтры. Показано: " + filteredData.size() + " экскурсий");
     }
 
+    // СПОСОБ 1: Многопоточная сортировка через Runnable (по возрастанию)
     @FXML
     private void handleSortAscending() {
-        List<AbstractExcursion> filtered = getCurrentFilteredExcursions();
-        if (filtered.isEmpty()) {
+        List<AbstractExcursion> currentExcursions = getCurrentDisplayedExcursions();
+        if (currentExcursions.isEmpty()) {
             showAlert(AlertType.WARNING, "Сортировка", "Нет экскурсий для сортировки");
             return;
         }
 
-        System.out.println("Сортировка по возрастанию для " + filtered.size() + " экскурсий");
+        System.out.println("🔸 Многопоточная сортировка по возрастанию (Runnable)");
 
-        ascendingTask = new SortTask(filtered, true, studio);
+        ascendingTask = new SortTask(currentExcursions, true, studio);
         Thread runnableThread = new Thread(ascendingTask, "Ascending-Runnable-Thread");
         runnableThread.start();
 
@@ -161,11 +163,11 @@ public class UserExcursionsController {
             try {
                 runnableThread.join();
                 javafx.application.Platform.runLater(() -> {
-                    // ПЕРЕЗАГРУЖАЕМ ДАННЫЕ ПОСЛЕ СОРТИРОВКИ
-                    studio.loadFromFile();
                     loadExcursionsData();
                     showAlert(AlertType.INFORMATION, "Сортировка",
-                            "Сортировка по возрастанию завершена!\nОтсортировано " + filtered.size() + " экскурсий");
+                            "Многопоточная сортировка по возрастанию завершена!\n" +
+                                    "Способ: Runnable\n" +
+                                    "Отсортировано " + currentExcursions.size() + " экскурсий");
                     ascendingTask = null;
                 });
             } catch (InterruptedException e) {
@@ -174,28 +176,29 @@ public class UserExcursionsController {
         }).start();
     }
 
+    // СПОСОБ 2: Многопоточная сортировка через Thread наследование (по убыванию)
     @FXML
     private void handleSortDescending() {
-        List<AbstractExcursion> filtered = getCurrentFilteredExcursions();
-        if (filtered.isEmpty()) {
+        List<AbstractExcursion> currentExcursions = getCurrentDisplayedExcursions();
+        if (currentExcursions.isEmpty()) {
             showAlert(AlertType.WARNING, "Сортировка", "Нет экскурсий для сортировки");
             return;
         }
 
-        System.out.println("Сортировка по убыванию для " + filtered.size() + " экскурсий");
+        System.out.println("🔸 Многопоточная сортировка по убыванию (Thread наследование)");
 
-        descendingThread = new SortThread(filtered, false, studio);
+        descendingThread = new SortThread(currentExcursions, false, studio);
         descendingThread.start();
 
         new Thread(() -> {
             try {
                 descendingThread.join();
                 javafx.application.Platform.runLater(() -> {
-                    // ПЕРЕЗАГРУЖАЕМ ДАННЫЕ ПОСЛЕ СОРТИРОВКИ
-                    studio.loadFromFile();
                     loadExcursionsData();
                     showAlert(AlertType.INFORMATION, "Сортировка",
-                            "Сортировка по убыванию завершена!\nОтсортировано " + filtered.size() + " экскурсий");
+                            "Многопоточная сортировка по убыванию завершена!\n" +
+                                    "Способ: Thread наследование\n" +
+                                    "Отсортировано " + currentExcursions.size() + " экскурсий");
                     descendingThread = null;
                 });
             } catch (InterruptedException e) {
@@ -211,21 +214,23 @@ public class UserExcursionsController {
         if (ascendingTask != null) {
             ascendingTask.cancel();
             anyCancelled = true;
-            System.out.println("Сортировка по возрастанию отменена");
+            System.out.println("Сортировка по возрастанию (Runnable) отменена");
         }
 
         if (descendingThread != null && descendingThread.isAlive()) {
             descendingThread.cancel();
             anyCancelled = true;
-            System.out.println("Сортировка по убыванию отменена");
+            System.out.println("Сортировка по убыванию (Thread) отменена");
         }
 
         if (anyCancelled) {
             showAlert(AlertType.INFORMATION, "Отмена сортировки",
-                    "Запрос на отмену всех сортировок отправлен");
+                    "Запрос на отмену многопоточных сортировок отправлен");
         } else {
+            // ЕСЛИ НЕТ АКТИВНЫХ СОРТИРОВОК, ВОССТАНАВЛИВАЕМ ИСХОДНЫЙ ПОРЯДОК
+            restoreOriginalOrder();
             showAlert(AlertType.INFORMATION, "Отмена сортировки",
-                    "Нет активных сортировок для отмены");
+                    "Сортировка отменена. Восстановлен исходный порядок экскурсий");
         }
     }
 
@@ -254,24 +259,13 @@ public class UserExcursionsController {
         }
     }
 
-    private List<AbstractExcursion> getCurrentFilteredExcursions() {
-        List<AbstractExcursion> filtered = new ArrayList<>();
-        for (AbstractExcursion abstractExcursion : studio.getExcursions()) {
-            if (abstractExcursion instanceof Excursion) {
-                Excursion excursion = (Excursion) abstractExcursion;
-
-                String dayFilter = dayFilterComboBox.getValue();
-                String guideFilter = guideFilterComboBox.getValue();
-
-                boolean dayMatch = "Все".equals(dayFilter) || excursion.getDayType().equals(dayFilter);
-                boolean guideMatch = "Все".equals(guideFilter) || excursion.getGuideLevel().equals(guideFilter);
-
-                if (dayMatch && guideMatch) {
-                    filtered.add(excursion);
-                }
-            }
+    // Вспомогательный метод для получения текущих отображаемых экскурсий
+    private List<AbstractExcursion> getCurrentDisplayedExcursions() {
+        List<AbstractExcursion> current = new ArrayList<>();
+        for (Excursion excursion : excursionsData) {
+            current.add(excursion);
         }
-        return filtered;
+        return current;
     }
 
     private void showAlert(AlertType type, String title, String message) {
