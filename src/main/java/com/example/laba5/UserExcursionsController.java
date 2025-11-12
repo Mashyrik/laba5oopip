@@ -7,19 +7,20 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserExcursionsController {
 
-    @FXML private TableView<Excursion> excursionsTable;
+    @FXML private FlowPane excursionsContainer;
     @FXML private ComboBox<String> dayFilterComboBox;
     @FXML private ComboBox<String> guideFilterComboBox;
     @FXML private Label costLabel;
@@ -31,6 +32,7 @@ public class UserExcursionsController {
 
     private SortTask ascendingTask = null;
     private SortThread descendingThread = null;
+    private Excursion selectedExcursion = null;
 
     @FXML
     private void initialize() {
@@ -38,7 +40,6 @@ public class UserExcursionsController {
         originalOrder = new ArrayList<>(studio.getExcursions());
 
         initializeFilters();
-        initializeTable();
         loadExcursionsData();
     }
 
@@ -53,29 +54,11 @@ public class UserExcursionsController {
         guideFilterComboBox.valueProperty().addListener((obs, oldVal, newVal) -> applyFilters());
     }
 
-    private void initializeTable() {
-        // УБИРАЕМ КОЛОНКУ СТОИМОСТИ - оставляем только 4 колонки
-        TableColumn<Excursion, String> placeColumn = (TableColumn<Excursion, String>) excursionsTable.getColumns().get(0);
-        TableColumn<Excursion, String> dayColumn = (TableColumn<Excursion, String>) excursionsTable.getColumns().get(1);
-        TableColumn<Excursion, String> timeColumn = (TableColumn<Excursion, String>) excursionsTable.getColumns().get(2);
-        TableColumn<Excursion, String> guideColumn = (TableColumn<Excursion, String>) excursionsTable.getColumns().get(3);
-
-        placeColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
-        dayColumn.setCellValueFactory(new PropertyValueFactory<>("dayType"));
-        timeColumn.setCellValueFactory(new PropertyValueFactory<>("timeOfDay"));
-        guideColumn.setCellValueFactory(new PropertyValueFactory<>("guideLevel"));
-
-        // УБИРАЕМ КОЛОНКУ СТОИМОСТИ - она больше не нужна в таблице
-
-        excursionsData = FXCollections.observableArrayList();
-        allExcursionsData = FXCollections.observableArrayList();
-
-        excursionsTable.setItems(excursionsData);
-    }
-
     private void loadExcursionsData() {
-        allExcursionsData.clear();
+        allExcursionsData = FXCollections.observableArrayList();
+        excursionsData = FXCollections.observableArrayList();
 
+        // Загружаем все экскурсии
         for (AbstractExcursion abstractExcursion : studio.getExcursions()) {
             if (abstractExcursion instanceof Excursion) {
                 allExcursionsData.add((Excursion) abstractExcursion);
@@ -83,9 +66,69 @@ public class UserExcursionsController {
         }
 
         excursionsData.setAll(allExcursionsData);
-        excursionsTable.refresh();
+        displayExcursions();
+    }
 
-        System.out.println("✅ Загружено экскурсий: " + excursionsData.size());
+    private void displayExcursions() {
+        excursionsContainer.getChildren().clear();
+        selectedExcursion = null;
+        costLabel.setText("Выберите экскурсию из списка");
+
+        for (Excursion excursion : excursionsData) {
+            VBox excursionCard = createExcursionCard(excursion);
+            excursionsContainer.getChildren().add(excursionCard);
+        }
+    }
+
+    private VBox createExcursionCard(Excursion excursion) {
+        VBox card = new VBox();
+        card.getStyleClass().add("form-container");
+        card.setStyle("-fx-pref-width: 260px; -fx-pref-height: 170px; -fx-padding: 15px; -fx-spacing: 10px; -fx-cursor: hand; -fx-alignment: center;");
+
+        // Заголовок карточки
+        Label titleLabel = new Label("🚗 " + excursion.getPlace());
+        titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-text-alignment: center;");
+        titleLabel.setWrapText(true);
+        titleLabel.setMaxWidth(240);
+        titleLabel.setAlignment(javafx.geometry.Pos.CENTER);
+
+        // Детали экскурсии
+        Label dayLabel = new Label("📅 " + excursion.getDayType());
+        dayLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #7f8c8d; -fx-text-alignment: center;");
+        dayLabel.setAlignment(javafx.geometry.Pos.CENTER);
+
+        Label timeLabel = new Label("⏰ " + excursion.getTimeOfDay());
+        timeLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #7f8c8d; -fx-text-alignment: center;");
+        timeLabel.setAlignment(javafx.geometry.Pos.CENTER);
+
+        Label guideLabel = new Label("👨‍💼 " + excursion.getGuideLevel());
+        guideLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #7f8c8d; -fx-text-alignment: center;");
+        guideLabel.setAlignment(javafx.geometry.Pos.CENTER);
+
+        // Стоимость (будет рассчитана при выборе)
+        Label costHintLabel = new Label("💵 Нажмите для расчета");
+        costHintLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #3498db; -fx-font-style: italic; -fx-text-alignment: center;");
+        costHintLabel.setAlignment(javafx.geometry.Pos.CENTER);
+
+        card.getChildren().addAll(titleLabel, dayLabel, timeLabel, guideLabel, costHintLabel);
+
+        // Обработчик клика
+        card.setOnMouseClicked(event -> {
+            // Сбрасываем выделение у всех карточек
+            for (var child : excursionsContainer.getChildren()) {
+                if (child instanceof VBox) {
+                    child.setStyle("-fx-pref-width: 260px; -fx-pref-height: 170px; -fx-padding: 15px; -fx-spacing: 10px; -fx-cursor: hand; -fx-alignment: center; -fx-background-color: white;");
+                }
+            }
+
+            // Выделяем выбранную карточку
+            card.setStyle("-fx-pref-width: 260px; -fx-pref-height: 170px; -fx-padding: 15px; -fx-spacing: 10px; -fx-cursor: hand; -fx-alignment: center; -fx-background-color: #e3f2fd; -fx-border-color: #3498db; -fx-border-width: 2px;");
+
+            selectedExcursion = excursion;
+            costLabel.setText("Выбрана экскурсия: " + excursion.getPlace() + "\nНажмите 'Рассчитать стоимость'");
+        });
+
+        return card;
     }
 
     @FXML
@@ -97,7 +140,7 @@ public class UserExcursionsController {
     private void handleResetFilters() {
         dayFilterComboBox.setValue("Все");
         guideFilterComboBox.setValue("Все");
-        costLabel.setText("Выберите экскурсию");
+        costLabel.setText("Выберите экскурсию из списка");
 
         restoreOriginalOrder();
         System.out.println("✅ Фильтры сброшены. Восстановлен исходный порядок: " + excursionsData.size() + " экскурсий");
@@ -114,29 +157,26 @@ public class UserExcursionsController {
 
         if ("Все".equals(dayFilter) && "Все".equals(guideFilter)) {
             excursionsData.setAll(allExcursionsData);
-            excursionsTable.refresh();
-            return;
-        }
+        } else {
+            ObservableList<Excursion> filteredData = FXCollections.observableArrayList();
+            for (Excursion excursion : allExcursionsData) {
+                boolean dayMatch = "Все".equals(dayFilter) || excursion.getDayType().equals(dayFilter);
+                boolean guideMatch = "Все".equals(guideFilter) || excursion.getGuideLevel().equals(guideFilter);
 
-        ObservableList<Excursion> filteredData = FXCollections.observableArrayList();
-
-        for (Excursion excursion : allExcursionsData) {
-            boolean dayMatch = "Все".equals(dayFilter) || excursion.getDayType().equals(dayFilter);
-            boolean guideMatch = "Все".equals(guideFilter) || excursion.getGuideLevel().equals(guideFilter);
-
-            if (dayMatch && guideMatch) {
-                filteredData.add(excursion);
+                if (dayMatch && guideMatch) {
+                    filteredData.add(excursion);
+                }
             }
+            excursionsData.setAll(filteredData);
         }
 
-        excursionsData.setAll(filteredData);
-        excursionsTable.refresh();
+        displayExcursions();
+        System.out.println("✅ Применены фильтры. Показано: " + excursionsData.size() + " экскурсий");
     }
 
-    // СПОСОБ 1: Многопоточная сортировка через Runnable (по возрастанию)
     @FXML
     private void handleSortAscending() {
-        List<AbstractExcursion> currentExcursions = getCurrentDisplayedExcursions();
+        List<AbstractExcursion> currentExcursions = new ArrayList<>(excursionsData);
         if (currentExcursions.isEmpty()) {
             showAlert(AlertType.WARNING, "Сортировка", "Нет экскурсий для сортировки");
             return;
@@ -165,10 +205,9 @@ public class UserExcursionsController {
         }).start();
     }
 
-    // СПОСОБ 2: Многопоточная сортировка через Thread наследование (по убыванию)
     @FXML
     private void handleSortDescending() {
-        List<AbstractExcursion> currentExcursions = getCurrentDisplayedExcursions();
+        List<AbstractExcursion> currentExcursions = new ArrayList<>(excursionsData);
         if (currentExcursions.isEmpty()) {
             showAlert(AlertType.WARNING, "Сортировка", "Нет экскурсий для сортировки");
             return;
@@ -224,36 +263,26 @@ public class UserExcursionsController {
 
     @FXML
     private void handleCalculateCost() {
-        Excursion selected = excursionsTable.getSelectionModel().getSelectedItem();
-        if (selected == null) {
+        if (selectedExcursion == null) {
             showAlert(AlertType.ERROR, "Ошибка", "Выберите экскурсию для расчета стоимости");
             return;
         }
 
-        double cost = studio.calculateCost(selected);
-        costLabel.setText(String.format("Стоимость: %.2f BYN\n%s, %s, %s, %s",
-                cost, selected.getPlace(), selected.getDayType(),
-                selected.getTimeOfDay(), selected.getGuideLevel()));
+        double cost = studio.calculateCost(selectedExcursion);
+        costLabel.setText(String.format("💰 Стоимость: %.2f BYN\n\n📍 %s\n📅 %s\n⏰ %s\n👨‍💼 %s",
+                cost, selectedExcursion.getPlace(), selectedExcursion.getDayType(),
+                selectedExcursion.getTimeOfDay(), selectedExcursion.getGuideLevel()));
     }
 
     @FXML
     private void handleBack() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/user_dashboard.fxml"));
-            Stage stage = (Stage) excursionsTable.getScene().getWindow();
+            Stage stage = (Stage) excursionsContainer.getScene().getWindow();
             stage.setScene(new Scene(root, 800, 600));
         } catch (Exception e) {
             showAlert(AlertType.ERROR, "Ошибка", "Не удалось вернуться: " + e.getMessage());
         }
-    }
-
-    // Вспомогательный метод для получения текущих отображаемых экскурсий
-    private List<AbstractExcursion> getCurrentDisplayedExcursions() {
-        List<AbstractExcursion> current = new ArrayList<>();
-        for (Excursion excursion : excursionsData) {
-            current.add(excursion);
-        }
-        return current;
     }
 
     private void showAlert(AlertType type, String title, String message) {

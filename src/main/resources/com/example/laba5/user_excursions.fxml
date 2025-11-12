@@ -67,43 +67,27 @@
                 <Label text="💰 Расчет стоимости" styleClass="title-small" style="-fx-padding: 0 0 15 0;"/>
 
                 <VBox spacing="10">
-                    <Label fx:id="costLabel" text="Выберите экскурсию из таблицы"
-                           styleClass="label-info" style="-fx-pref-height: 60px; -fx-wrap-text: true; -fx-pref-width: 240px;"/>
+                    <Label fx:id="costLabel" text="Выберите экскурсию из списка"
+                           styleClass="label-info" style="-fx-pref-height: 80px; -fx-wrap-text: true; -fx-pref-width: 240px; -fx-background-color: #f8f9fa; -fx-padding: 10px; -fx-border-radius: 5px;"/>
 
-                    <Button text="Рассчитать" onAction="#handleCalculateCost"
-                            styleClass="btn-success" style="-fx-pref-width: 240px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
+                    <Button text="Рассчитать стоимость" onAction="#handleCalculateCost"
+                            styleClass="btn-success" style="-fx-pref-width: 240px; -fx-pref-height: 45px; -fx-font-size: 14px;"/>
                 </VBox>
             </VBox>
         </VBox>
     </left>
 
     <center>
-        <VBox spacing="15" style="-fx-padding: 20; -fx-alignment: top-left;">
+        <VBox spacing="15" style="-fx-padding: 20;">
             <Label text="🎯 Доступные экскурсии" styleClass="title-small"/>
-            <TableView fx:id="excursionsTable" VBox.vgrow="ALWAYS">
-                <columns>
-                    <TableColumn prefWidth="200" text="Место">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="place" />
-                        </cellValueFactory>
-                    </TableColumn>
-                    <TableColumn prefWidth="150" text="День недели">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="dayType" />
-                        </cellValueFactory>
-                    </TableColumn>
-                    <TableColumn prefWidth="150" text="Время суток">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="timeOfDay" />
-                        </cellValueFactory>
-                    </TableColumn>
-                    <TableColumn prefWidth="250" text="Квалификация гида">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="guideLevel" />
-                        </cellValueFactory>
-                    </TableColumn>
-                </columns>
-            </TableView>
+
+            <!-- Контейнер для карточек экскурсий с скроллом -->
+            <ScrollPane style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
+                <FlowPane fx:id="excursionsContainer" hgap="12" vgap="12" style="-fx-padding: 8px; -fx-background-color: transparent;"
+                          prefWrapLength="1150">
+                    <!-- Карточки экскурсий будут добавляться динамически -->
+                </FlowPane>
+            </ScrollPane>
         </VBox>
     </center>
 
