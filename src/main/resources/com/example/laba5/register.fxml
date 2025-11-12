@@ -7,30 +7,54 @@
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.laba5.RegisterController"
-            style="-fx-background-color: #ecf0f1;">
+            stylesheets="@styles.css">
 
     <center>
-        <VBox alignment="CENTER" spacing="20">
-            <Label text="Экскурсионная студия" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
-            <Label text="Регистрация" style="-fx-font-size: 18px; -fx-text-fill: #7f8c8d;"/>
+        <VBox alignment="CENTER" spacing="30" style="-fx-padding: 40;">
+            <!-- Заголовок -->
+            <VBox alignment="CENTER" spacing="8">
+                <Label text="🚗 ТурЭкскурс" styleClass="title-large"/>
+                <Label text="Создание новой учетной записи" styleClass="subtitle"/>
+            </VBox>
 
-            <VBox alignment="CENTER" spacing="15" style="-fx-padding: 30px; -fx-background-color: white; -fx-border-radius: 10px;">
-                <TextField fx:id="usernameField" promptText="Введите логин" style="-fx-pref-width: 250px; -fx-pref-height: 35px;"/>
-                <PasswordField fx:id="passwordField" promptText="Введите пароль" style="-fx-pref-width: 250px; -fx-pref-height: 35px;"/>
-                <PasswordField fx:id="confirmPasswordField" promptText="Подтвердите пароль" style="-fx-pref-width: 250px; -fx-pref-height: 35px;"/>
+            <!-- Форма регистрации -->
+            <VBox alignment="CENTER" spacing="25" styleClass="form-container" style="-fx-pref-width: 400px;">
+                <Label text="Регистрация" styleClass="title-small"/>
 
-                <HBox spacing="10" alignment="CENTER">
-                    <Button text="Зарегистрироваться" onAction="#handleRegister"
-                            style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-pref-width: 150px; -fx-pref-height: 35px;"/>
-                    <Button text="Назад" onAction="#handleBackToLogin"
-                            style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-pref-width: 100px; -fx-pref-height: 35px;"/>
+                <VBox spacing="15" style="-fx-pref-width: 350px;">
+                    <!-- Логин -->
+                    <VBox spacing="8">
+                        <Label text="Логин:" styleClass="label-bold"/>
+                        <TextField fx:id="usernameField" styleClass="form-field" promptText="Придумайте логин"/>
+                    </VBox>
+
+                    <!-- Пароль -->
+                    <VBox spacing="8">
+                        <Label text="Пароль:" styleClass="label-bold"/>
+                        <PasswordField fx:id="passwordField" styleClass="form-field" promptText="Придумайте пароль"/>
+                    </VBox>
+
+                    <!-- Подтверждение пароля -->
+                    <VBox spacing="8">
+                        <Label text="Подтверждение пароля:" styleClass="label-bold"/>
+                        <PasswordField fx:id="confirmPasswordField" styleClass="form-field" promptText="Повторите пароль"/>
+                    </VBox>
+                </VBox>
+
+                <!-- Кнопки -->
+                <HBox spacing="15" alignment="CENTER">
+                    <Button text="Зарегистрироваться" onAction="#handleRegister" styleClass="btn-success" style="-fx-pref-width: 180px; -fx-pref-height: 45px;"/>
+                    <Button text="Назад" onAction="#handleBackToLogin" styleClass="btn-secondary" style="-fx-pref-width: 120px; -fx-pref-height: 45px;"/>
                 </HBox>
+
+                <!-- Требования -->
+                <VBox spacing="5" style="-fx-pref-width: 350px;">
+                    <Label text="Требования:" styleClass="label-bold"/>
+                    <Label text="• Логин: минимум 3 символа" styleClass="label-info"/>
+                    <Label text="• Пароль: минимум 4 символа" styleClass="label-info"/>
+                </VBox>
             </VBox>
         </VBox>
     </center>
-
-    <padding>
-        <Insets top="50.0" right="50.0" bottom="50.0" left="50.0"/>
-    </padding>
 
 </BorderPane>

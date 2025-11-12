@@ -25,21 +25,12 @@ public class UserDashboardController {
     @FXML
     private void handleViewExcursions() {
         try {
-            // Переходим к просмотру экскурсий
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/user_excursions.fxml"));
             Stage stage = (Stage) welcomeLabel.getScene().getWindow();
-            stage.setScene(new Scene(root, 900, 600));
-
+            stage.setScene(new Scene(root, 1200, 700));
         } catch (Exception e) {
             showAlert(AlertType.ERROR, "Ошибка", "Не удалось открыть просмотр экскурсий: " + e.getMessage());
         }
-    }
-
-    @FXML
-    private void handleCalculateCost() {
-        showAlert(AlertType.INFORMATION, "Расчет стоимости",
-                "Функция расчета стоимости доступна в разделе 'Просмотр экскурсий'\n\n" +
-                        "Перейдите в раздел просмотра для расчета стоимости конкретных экскурсий");
     }
 
     @FXML

@@ -8,43 +8,53 @@
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.laba5.UserManagementController"
-            style="-fx-background-color: #ecf0f1;">
+            stylesheets="@styles.css">
 
     <top>
-        <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: #2c3e50;">
-            <Label text="Управление пользователями" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Button text="Назад" onAction="#handleBack" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-pref-width: 100px;"/>
-                <Button text="Обновить" onAction="#handleRefresh" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-pref-width: 100px;"/>
+        <VBox styleClass="header">
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Button text="← Назад" onAction="#handleBack" styleClass="btn-secondary" style="-fx-pref-width: 100px;"/>
+                <VBox>
+                    <Label text="Управление пользователями" styleClass="header-title"/>
+                    <Label text="Блокировка и разблокировка пользователей" styleClass="header-subtitle"/>
+                </VBox>
+                <Button text="🔄 Обновить" onAction="#handleRefresh" styleClass="btn-primary" style="-fx-pref-width: 100px;"/>
             </HBox>
         </VBox>
     </top>
 
     <center>
-        <VBox spacing="10" style="-fx-padding: 20;">
-            <Label text="Список пользователей" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-            <TableView fx:id="usersTable" style="-fx-pref-height: 400px;">
-                <columns>
-                    <TableColumn prefWidth="200" text="Логин">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="username" />
-                        </cellValueFactory>
-                    </TableColumn>
-                    <TableColumn prefWidth="150" text="Роль">
-                        <cellValueFactory>
-                            <PropertyValueFactory property="role" />
-                        </cellValueFactory>
-                    </TableColumn>
-                    <TableColumn prefWidth="150" text="Статус"/>
-                    <TableColumn prefWidth="250" text="Действия"/>
-                </columns>
-            </TableView>
+        <VBox spacing="20" style="-fx-padding: 25;">
+            <!-- Таблица пользователей -->
+            <VBox styleClass="section-container">
+                <Label text="👥 Список пользователей" styleClass="title-small" style="-fx-padding: 0 0 15 0;"/>
+                <TableView fx:id="usersTable" style="-fx-pref-height: 400px;">
+                    <columns>
+                        <TableColumn prefWidth="200" text="Логин">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="username" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="150" text="Роль">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="role" />
+                            </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn prefWidth="150" text="Статус"/>
+                        <TableColumn prefWidth="250" text="Действия"/>
+                    </columns>
+                </TableView>
+            </VBox>
 
-            <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: #f8f9fa; -fx-border-radius: 5px;">
-                <Label text="Информация:" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
-                <Label text="• Зеленый - пользователь активен" style="-fx-text-fill: #27ae60;"/>
-                <Label text="• Красный - пользователь заблокирован" style="-fx-text-fill: #e74c3c;"/>
-                <Label text="• Заблокированные пользователи не могут войти в систему" style="-fx-text-fill: #7f8c8d;"/>
+            <!-- Легенда -->
+            <VBox styleClass="section-container" style="-fx-pref-width: 600px;">
+                <Label text="ℹ️ Информация" styleClass="title-small" style="-fx-padding: 0 0 10 0;"/>
+                <VBox spacing="8">
+                    <Label text="• Зеленый - пользователь активен" styleClass="label-info"/>
+                    <Label text="• Красный - пользователь заблокирован" styleClass="label-info"/>
+                    <Label text="• Заблокированные пользователи не могут войти в систему" styleClass="label-info"/>
+                    <Label text="• Нельзя заблокировать самого себя" styleClass="label-info"/>
+                </VBox>
             </VBox>
         </VBox>
     </center>

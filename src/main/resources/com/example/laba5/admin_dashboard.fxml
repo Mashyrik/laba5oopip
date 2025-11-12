@@ -7,26 +7,40 @@
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.laba5.AdminDashboardController"
-            style="-fx-background-color: #ecf0f1;">
+            stylesheets="@styles.css">
 
     <top>
-        <VBox spacing="10" style="-fx-padding: 20; -fx-background-color: #2c3e50;">
-            <Label text="Панель администратора" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;"/>
-            <Label fx:id="welcomeLabel" text="Добро пожаловать!" style="-fx-text-fill: #ecf0f1; -fx-font-size: 14px;"/>
+        <VBox styleClass="header">
+            <Label text="Панель администратора" styleClass="header-title"/>
+            <Label fx:id="welcomeLabel" text="Добро пожаловать!" styleClass="header-subtitle"/>
         </VBox>
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="20">
-            <Label text="Функции администратора" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+        <VBox alignment="CENTER" spacing="30" style="-fx-padding: 40;">
+            <Label text="Функции администратора" styleClass="title-medium"/>
 
-            <VBox spacing="10" alignment="CENTER">
-                <Button text="Управление экскурсиями" onAction="#handleExcursions"
-                        style="-fx-pref-width: 200px; -fx-background-color: #3498db; -fx-text-fill: white;"/>
-                <Button text="Управление пользователями" onAction="#handleUsers"
-                        style="-fx-pref-width: 200px; -fx-background-color: #3498db; -fx-text-fill: white;"/>
-                <Button text="Выйти" onAction="#handleLogout"
-                        style="-fx-pref-width: 200px; -fx-background-color: #e74c3c; -fx-text-fill: white;"/>
+            <VBox spacing="20" alignment="CENTER" styleClass="form-container" style="-fx-pref-width: 500px;">
+                <VBox spacing="15" alignment="CENTER">
+                    <Button text="📋 Управление экскурсиями" onAction="#handleExcursions"
+                            styleClass="btn-primary" style="-fx-pref-width: 300px; -fx-pref-height: 50px; -fx-font-size: 16px;"/>
+
+                    <Button text="👥 Управление пользователями" onAction="#handleUsers"
+                            styleClass="btn-warning" style="-fx-pref-width: 300px; -fx-pref-height: 50px; -fx-font-size: 16px;"/>
+
+                    <Button text="🚪 Выйти из системы" onAction="#handleLogout"
+                            styleClass="btn-danger" style="-fx-pref-width: 300px; -fx-pref-height: 50px; -fx-font-size: 16px;"/>
+                </VBox>
+            </VBox>
+
+            <!-- Статистика -->
+            <VBox styleClass="section-container" style="-fx-pref-width: 500px;">
+                <Label text="📊 Быстрая статистика" styleClass="title-small" style="-fx-padding: 0 0 10 0;"/>
+                <VBox spacing="8">
+                    <Label text="• Управление экскурсиями: добавление, редактирование, удаление" styleClass="label-info"/>
+                    <Label text="• Управление пользователями: блокировка, разблокировка" styleClass="label-info"/>
+                    <Label text="• Просмотр статистики и отчетов" styleClass="label-info"/>
+                </VBox>
             </VBox>
         </VBox>
     </center>

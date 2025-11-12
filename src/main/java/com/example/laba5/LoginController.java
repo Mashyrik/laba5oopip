@@ -8,6 +8,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class LoginController {
@@ -19,7 +20,24 @@ public class LoginController {
 
     @FXML
     private void initialize() {
-        System.out.println("✅ LoginController инициализирован!");
+        // Настраиваем поведение полей ввода
+        setupField(usernameField, "Введите логин");
+        setupField(passwordField, "Введите пароль");
+
+        // Автоматический вход при нажатии Enter
+        usernameField.setOnAction(e -> passwordField.requestFocus());
+        passwordField.setOnAction(e -> handleLogin());
+    }
+
+    private void setupField(TextField field, String placeholder) {
+        field.setPromptText(placeholder);
+
+        // Очистка поля при первом клике если там placeholder
+        field.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal && field.getText().equals(placeholder)) {
+                field.setText("");
+            }
+        });
     }
 
     @FXML
@@ -27,51 +45,42 @@ public class LoginController {
         String username = usernameField.getText().trim();
         String password = passwordField.getText().trim();
 
-        System.out.println("Попытка входа: " + username + "/" + password);
-
         if (username.isEmpty() || password.isEmpty()) {
-            showAlert(AlertType.ERROR, "Ошибка", "Заполните все поля");
+            showAlert(AlertType.WARNING, "Заполните все поля", "Пожалуйста, введите логин и пароль");
             return;
         }
 
         if (userManager.login(username, password)) {
             User currentUser = userManager.getCurrentUser();
-            System.out.println("✅ Успешный вход! Пользователь: " + currentUser.getUsername());
 
             try {
                 String fxmlFile = currentUser.isAdmin()
                         ? "/com/example/laba5/admin_dashboard.fxml"
                         : "/com/example/laba5/user_dashboard.fxml";
 
-                System.out.println("Пытаемся загрузить: " + fxmlFile);
-
                 Parent root = FXMLLoader.load(getClass().getResource(fxmlFile));
                 Stage stage = (Stage) usernameField.getScene().getWindow();
-                stage.setScene(new Scene(root, 800, 600));
-                stage.setTitle(currentUser.isAdmin() ? "Панель администратора" : "Панель пользователя");
+                stage.setScene(new Scene(root, 1000, 700));
+                stage.setTitle(currentUser.isAdmin() ? "Панель администратора - ТурЭкскурс" : "Панель пользователя - ТурЭкскурс");
 
             } catch (Exception e) {
-                System.out.println("❌ Ошибка загрузки: " + e.getMessage());
-                e.printStackTrace();
-                showAlert(AlertType.ERROR, "Ошибка", "Ошибка загрузки: " + e.getMessage());
+                showAlert(AlertType.ERROR, "Ошибка", "Не удалось загрузить приложение: " + e.getMessage());
             }
 
         } else {
-            showAlert(AlertType.ERROR, "Ошибка входа", "Неверный логин или пароль");
+            showAlert(AlertType.ERROR, "Ошибка входа", "Неверный логин или пароль. Проверьте введенные данные.");
         }
     }
 
     @FXML
     private void handleRegister() {
         try {
-            System.out.println("Переход к регистрации...");
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/register.fxml"));
             Stage stage = (Stage) usernameField.getScene().getWindow();
-            stage.setScene(new Scene(root, 600, 450));
-            stage.setTitle("Регистрация");
+            stage.setScene(new Scene(root, 600, 500));
+            stage.setTitle("Регистрация - ТурЭкскурс");
         } catch (Exception e) {
-            System.out.println("❌ Ошибка загрузки формы регистрации: " + e.getMessage());
-            showAlert(AlertType.ERROR, "Ошибка", "Не удалось открыть форму регистрации: " + e.getMessage());
+            showAlert(AlertType.ERROR, "Ошибка", "Не удалось открыть форму регистрации");
         }
     }
 
@@ -80,6 +89,16 @@ public class LoginController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
+
+        // Добавляем иконку в алерт
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        try {
+            Image icon = new Image(getClass().getResourceAsStream("/com/example/laba5/icon.png"));
+            stage.getIcons().add(icon);
+        } catch (Exception e) {
+            // Иконка не обязательна для алертов
+        }
+
         alert.showAndWait();
     }
 }

@@ -8,80 +8,96 @@
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.laba5.UserExcursionsController"
-            style="-fx-background-color: #ecf0f1;">
+            stylesheets="@styles.css">
 
     <top>
-        <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: #3498db;">
-            <Label text="Просмотр экскурсий" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
-            <Button text="Назад" onAction="#handleBack" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-pref-width: 100px;"/>
+        <VBox styleClass="header">
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Button text="← Назад" onAction="#handleBack" styleClass="btn-secondary" style="-fx-pref-width: 100px;"/>
+                <VBox>
+                    <Label text="Просмотр экскурсий" styleClass="header-title"/>
+                    <Label text="Фильтрация, сортировка и расчет стоимости" styleClass="header-subtitle"/>
+                </VBox>
+            </HBox>
         </VBox>
     </top>
 
     <left>
-        <VBox spacing="15" style="-fx-padding: 20; -fx-pref-width: 250px;">
+        <VBox spacing="20" style="-fx-padding: 20; -fx-pref-width: 280px;">
             <!-- Фильтры -->
-            <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: white; -fx-border-radius: 5px;">
-                <Label text="Фильтры" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #3498db;"/>
+            <VBox styleClass="form-container">
+                <Label text="🔍 Фильтры" styleClass="title-small" style="-fx-padding: 0 0 15 0;"/>
 
-                <Label text="День:" style="-fx-font-weight: bold;"/>
-                <ComboBox fx:id="dayFilterComboBox" style="-fx-pref-width: 200px;"/>
+                <VBox spacing="12">
+                    <VBox spacing="5">
+                        <Label text="День недели:" styleClass="label-bold"/>
+                        <ComboBox fx:id="dayFilterComboBox" style="-fx-pref-height: 40px; -fx-background-radius: 8px; -fx-pref-width: 240px;"/>
+                    </VBox>
 
-                <Label text="Квалификация гида:" style="-fx-font-weight: bold;"/>
-                <ComboBox fx:id="guideFilterComboBox" style="-fx-pref-width: 200px;"/>
+                    <VBox spacing="5">
+                        <Label text="Квалификация гида:" styleClass="label-bold"/>
+                        <ComboBox fx:id="guideFilterComboBox" style="-fx-pref-height: 40px; -fx-background-radius: 8px; -fx-pref-width: 240px;"/>
+                    </VBox>
+                </VBox>
 
-                <Button text="Применить фильтры" onAction="#handleApplyFilters"
-                        style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-pref-width: 200px;"/>
-                <Button text="Сбросить фильтры" onAction="#handleResetFilters"
-                        style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-pref-width: 200px;"/>
+                <VBox spacing="8" style="-fx-padding: 10 0 0 0;">
+                    <Button text="Применить" onAction="#handleApplyFilters"
+                            styleClass="btn-primary" style="-fx-pref-width: 240px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
+                    <Button text="Сбросить" onAction="#handleResetFilters"
+                            styleClass="btn-secondary" style="-fx-pref-width: 240px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
+                </VBox>
             </VBox>
 
             <!-- Сортировка -->
-            <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: white; -fx-border-radius: 5px;">
-                <Label text="Сортировка" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #9b59b6;"/>
+            <VBox styleClass="form-container">
+                <Label text="📊 Сортировка" styleClass="title-small" style="-fx-padding: 0 0 15 0;"/>
 
-                <Button text="По возрастанию (Runnable)" onAction="#handleSortAscending"
-                        style="-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-pref-width: 200px;"/>
-                <Button text="По убыванию (Thread)" onAction="#handleSortDescending"
-                        style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-pref-width: 200px;"/>
-                <Button text="Отменить сортировку" onAction="#handleCancelSort"
-                        style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-pref-width: 200px;"/>
+                <VBox spacing="8">
+                    <Button text="Возрастание" onAction="#handleSortAscending"
+                            styleClass="btn-primary" style="-fx-pref-width: 240px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
+                    <Button text="Убывание" onAction="#handleSortDescending"
+                            styleClass="btn-warning" style="-fx-pref-width: 240px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
+                    <Button text="Отмена" onAction="#handleCancelSort"
+                            styleClass="btn-secondary" style="-fx-pref-width: 240px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
+                </VBox>
             </VBox>
 
             <!-- Расчет стоимости -->
-            <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: white; -fx-border-radius: 5px;">
-                <Label text="Расчет стоимости" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+            <VBox styleClass="form-container">
+                <Label text="💰 Расчет стоимости" styleClass="title-small" style="-fx-padding: 0 0 15 0;"/>
 
-                <Label fx:id="costLabel" text="Выберите экскурсию"
-                       style="-fx-font-size: 14px; -fx-text-fill: #2c3e50; -fx-wrap-text: true; -fx-pref-height: 60px;"/>
+                <VBox spacing="10">
+                    <Label fx:id="costLabel" text="Выберите экскурсию из таблицы"
+                           styleClass="label-info" style="-fx-pref-height: 60px; -fx-wrap-text: true; -fx-pref-width: 240px;"/>
 
-                <Button text="Рассчитать стоимость" onAction="#handleCalculateCost"
-                        style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-pref-width: 200px;"/>
+                    <Button text="Рассчитать" onAction="#handleCalculateCost"
+                            styleClass="btn-success" style="-fx-pref-width: 240px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
+                </VBox>
             </VBox>
         </VBox>
     </left>
 
     <center>
-        <VBox spacing="10" style="-fx-padding: 20;">
-            <Label text="Доступные экскурсии" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-            <TableView fx:id="excursionsTable" style="-fx-pref-height: 500px;">
+        <VBox spacing="15" style="-fx-padding: 20; -fx-alignment: top-left;">
+            <Label text="🎯 Доступные экскурсии" styleClass="title-small"/>
+            <TableView fx:id="excursionsTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <!-- УБИРАЕМ КОЛОНКУ СТОИМОСТИ - оставляем только 4 колонки -->
                     <TableColumn prefWidth="200" text="Место">
                         <cellValueFactory>
                             <PropertyValueFactory property="place" />
                         </cellValueFactory>
                     </TableColumn>
-                    <TableColumn prefWidth="120" text="День">
+                    <TableColumn prefWidth="150" text="День недели">
                         <cellValueFactory>
                             <PropertyValueFactory property="dayType" />
                         </cellValueFactory>
                     </TableColumn>
-                    <TableColumn prefWidth="120" text="Время">
+                    <TableColumn prefWidth="150" text="Время суток">
                         <cellValueFactory>
                             <PropertyValueFactory property="timeOfDay" />
                         </cellValueFactory>
                     </TableColumn>
-                    <TableColumn prefWidth="150" text="Квалификация гида">
+                    <TableColumn prefWidth="250" text="Квалификация гида">
                         <cellValueFactory>
                             <PropertyValueFactory property="guideLevel" />
                         </cellValueFactory>
