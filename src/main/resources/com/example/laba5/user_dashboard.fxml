@@ -19,8 +19,7 @@
     <VBox spacing="10" alignment="CENTER">
         <Button text="Просмотр экскурсий" onAction="#handleViewExcursions"
                 style="-fx-pref-width: 200px; -fx-background-color: #3498db; -fx-text-fill: white;"/>
-        <Button text="Расчет стоимости" onAction="#handleCalculateCost"
-                style="-fx-pref-width: 200px; -fx-background-color: #3498db; -fx-text-fill: white;"/>
+
         <Button text="Выйти" onAction="#handleLogout"
                 style="-fx-pref-width: 200px; -fx-background-color: #e74c3c; -fx-text-fill: white;"/>
     </VBox>
