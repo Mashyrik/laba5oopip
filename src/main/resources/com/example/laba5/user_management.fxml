@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.laba5.UserManagementController"
+            style="-fx-background-color: #ecf0f1;">
+
+    <top>
+        <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: #2c3e50;">
+            <Label text="Управление пользователями" style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Button text="Назад" onAction="#handleBack" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-pref-width: 100px;"/>
+                <Button text="Обновить" onAction="#handleRefresh" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-pref-width: 100px;"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="10" style="-fx-padding: 20;">
+            <Label text="Список пользователей" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            <TableView fx:id="usersTable" style="-fx-pref-height: 400px;">
+                <columns>
+                    <TableColumn prefWidth="200" text="Логин">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="username" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn prefWidth="150" text="Роль">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="role" />
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn prefWidth="150" text="Статус"/>
+                    <TableColumn prefWidth="250" text="Действия"/>
+                </columns>
+            </TableView>
+
+            <VBox spacing="10" style="-fx-padding: 15; -fx-background-color: #f8f9fa; -fx-border-radius: 5px;">
+                <Label text="Информация:" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                <Label text="• Зеленый - пользователь активен" style="-fx-text-fill: #27ae60;"/>
+                <Label text="• Красный - пользователь заблокирован" style="-fx-text-fill: #e74c3c;"/>
+                <Label text="• Заблокированные пользователи не могут войти в систему" style="-fx-text-fill: #7f8c8d;"/>
+            </VBox>
+        </VBox>
+    </center>
+
+</BorderPane>

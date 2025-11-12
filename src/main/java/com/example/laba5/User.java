@@ -23,6 +23,7 @@ public class User implements Serializable {
 
     // Сеттеры
     public void setBlocked(boolean blocked) { this.blocked = blocked; }
+    public void setRole(UserRole role) { this.role = role; } // Добавьте этот сеттер
 
     public boolean isAdmin() {
         return role == UserRole.ADMIN;

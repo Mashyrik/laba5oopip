@@ -54,11 +54,17 @@ public class AdminDashboardController {
 
     @FXML
     private void handleUsers() {
-        showAlert(AlertType.INFORMATION, "Управление пользователями",
-                "Здесь будет управление пользователями:\n" +
-                        "• Блокировка пользователей\n" +
-                        "• Разблокировка пользователей\n" +
-                        "• Просмотр всех пользователей");
+        try {
+            System.out.println("Переход к управлению пользователями...");
+            Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/user_management.fxml"));
+            Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+            stage.setScene(new Scene(root, 900, 600));
+            stage.setTitle("Управление пользователями");
+        } catch (Exception e) {
+            System.out.println("❌ Ошибка загрузки управления пользователями: " + e.getMessage());
+            e.printStackTrace();
+            showAlert(AlertType.ERROR, "Ошибка", "Не удалось открыть управление пользователями: " + e.getMessage());
+        }
     }
 
     @FXML
