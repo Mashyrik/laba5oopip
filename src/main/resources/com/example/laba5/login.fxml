@@ -40,9 +40,6 @@
                     <Button text="Войти" onAction="#handleLogin" styleClass="btn-primary" style="-fx-pref-width: 350px; -fx-pref-height: 45px;"/>
                     <Button text="Зарегистрироваться" onAction="#handleRegister" styleClass="btn-secondary" style="-fx-pref-width: 350px; -fx-pref-height: 45px;"/>
                 </VBox>
-
-                <!-- Подсказка -->
-                <Label text="Тестовые аккаунты: admin/admin123, user/user123" styleClass="label-info"/>
             </VBox>
         </VBox>
     </center>

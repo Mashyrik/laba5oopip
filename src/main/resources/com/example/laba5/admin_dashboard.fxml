@@ -35,11 +35,10 @@
 
             <!-- Статистика -->
             <VBox styleClass="section-container" style="-fx-pref-width: 500px;">
-                <Label text="📊 Быстрая статистика" styleClass="title-small" style="-fx-padding: 0 0 10 0;"/>
+                <Label text="Функционал" styleClass="title-small" style="-fx-padding: 0 0 10 0;"/>
                 <VBox spacing="8">
                     <Label text="• Управление экскурсиями: добавление, редактирование, удаление" styleClass="label-info"/>
                     <Label text="• Управление пользователями: блокировка, разблокировка" styleClass="label-info"/>
-                    <Label text="• Просмотр статистики и отчетов" styleClass="label-info"/>
                 </VBox>
             </VBox>
         </VBox>

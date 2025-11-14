@@ -10,6 +10,9 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.beans.property.SimpleStringProperty;
+
+import java.util.List;
 
 public class ExcursionManagementController {
 
@@ -17,10 +20,35 @@ public class ExcursionManagementController {
     @FXML private ComboBox<String> dayComboBox;
     @FXML private ComboBox<String> timeComboBox;
     @FXML private ComboBox<String> guideComboBox;
-    @FXML private TableView<Excursion> excursionsTable;
+    @FXML private TableView<ExcursionTableModel> excursionsTable;
+    @FXML private Label excursionCountLabel;
 
     private ExcursionStudio studio = ExcursionStudio.getInstance();
-    private ObservableList<Excursion> excursionsData;
+    private ObservableList<ExcursionTableModel> excursionsData;
+
+    // Модель для таблицы
+    public static class ExcursionTableModel {
+        private final String place;
+        private final String dayType;
+        private final String timeOfDay;
+        private final String guideLevel;
+        private final String cost;
+
+        public ExcursionTableModel(Excursion excursion, double cost) {
+            this.place = excursion.getPlace();
+            this.dayType = excursion.getDayType();
+            this.timeOfDay = excursion.getTimeOfDay();
+            this.guideLevel = excursion.getGuideLevel();
+            this.cost = String.format("%.2f BYN", cost);
+        }
+
+        // Геттеры
+        public String getPlace() { return place; }
+        public String getDayType() { return dayType; }
+        public String getTimeOfDay() { return timeOfDay; }
+        public String getGuideLevel() { return guideLevel; }
+        public String getCost() { return cost; }
+    }
 
     @FXML
     private void initialize() {
@@ -28,6 +56,7 @@ public class ExcursionManagementController {
         initializeForm();
         initializeTable();
         loadExcursionsData();
+        updateExcursionCount();
     }
 
     private void initializeForm() {
@@ -45,34 +74,32 @@ public class ExcursionManagementController {
 
     private void initializeTable() {
         // Настраиваем колонки таблицы
-        TableColumn<Excursion, String> placeColumn = (TableColumn<Excursion, String>) excursionsTable.getColumns().get(0);
-        TableColumn<Excursion, String> dayColumn = (TableColumn<Excursion, String>) excursionsTable.getColumns().get(1);
-        TableColumn<Excursion, String> timeColumn = (TableColumn<Excursion, String>) excursionsTable.getColumns().get(2);
-        TableColumn<Excursion, String> guideColumn = (TableColumn<Excursion, String>) excursionsTable.getColumns().get(3);
-        TableColumn<Excursion, String> costColumn = (TableColumn<Excursion, String>) excursionsTable.getColumns().get(4);
-        TableColumn<Excursion, String> actionColumn = (TableColumn<Excursion, String>) excursionsTable.getColumns().get(5);
+        TableColumn<ExcursionTableModel, String> placeColumn = (TableColumn<ExcursionTableModel, String>) excursionsTable.getColumns().get(0);
+        TableColumn<ExcursionTableModel, String> dayColumn = (TableColumn<ExcursionTableModel, String>) excursionsTable.getColumns().get(1);
+        TableColumn<ExcursionTableModel, String> timeColumn = (TableColumn<ExcursionTableModel, String>) excursionsTable.getColumns().get(2);
+        TableColumn<ExcursionTableModel, String> guideColumn = (TableColumn<ExcursionTableModel, String>) excursionsTable.getColumns().get(3);
+        TableColumn<ExcursionTableModel, String> costColumn = (TableColumn<ExcursionTableModel, String>) excursionsTable.getColumns().get(4);
+        TableColumn<ExcursionTableModel, String> actionColumn = (TableColumn<ExcursionTableModel, String>) excursionsTable.getColumns().get(5);
 
         placeColumn.setCellValueFactory(new PropertyValueFactory<>("place"));
         dayColumn.setCellValueFactory(new PropertyValueFactory<>("dayType"));
         timeColumn.setCellValueFactory(new PropertyValueFactory<>("timeOfDay"));
         guideColumn.setCellValueFactory(new PropertyValueFactory<>("guideLevel"));
+        costColumn.setCellValueFactory(new PropertyValueFactory<>("cost"));
+        actionColumn.setCellValueFactory(new PropertyValueFactory<>("actions"));
 
-        // Кастомная колонка для стоимости
-        costColumn.setCellValueFactory(cellData -> {
-            Excursion excursion = cellData.getValue();
-            double cost = studio.calculateCost(excursion);
-            return new javafx.beans.property.SimpleStringProperty(String.format("%.2f BYN", cost));
-        });
+        // Убираем пустой столбец справа
+        excursionsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         // Кастомная колонка для действий
-        actionColumn.setCellFactory(column -> new javafx.scene.control.TableCell<Excursion, String>() {
+        actionColumn.setCellFactory(column -> new TableCell<ExcursionTableModel, String>() {
             private final Button deleteButton = new Button("Удалить");
 
             {
-                deleteButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
+                deleteButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 12px; -fx-pref-width: 60px;");
                 deleteButton.setOnAction(event -> {
-                    Excursion excursion = getTableView().getItems().get(getIndex());
-                    handleDeleteExcursion(excursion);
+                    ExcursionTableModel excursionModel = getTableView().getItems().get(getIndex());
+                    handleDeleteExcursion(excursionModel);
                 });
             }
 
@@ -93,13 +120,22 @@ public class ExcursionManagementController {
 
     private void loadExcursionsData() {
         excursionsData.clear();
-        // Преобразуем AbstractExcursion в Excursion для таблицы
+        // Преобразуем AbstractExcursion в ExcursionTableModel для таблицы
         for (AbstractExcursion abstractExcursion : studio.getExcursions()) {
             if (abstractExcursion instanceof Excursion) {
-                excursionsData.add((Excursion) abstractExcursion);
+                Excursion excursion = (Excursion) abstractExcursion;
+                double cost = studio.calculateCost(excursion);
+                excursionsData.add(new ExcursionTableModel(excursion, cost));
             }
         }
+        updateExcursionCount();
         System.out.println("Загружено экскурсий в таблицу: " + excursionsData.size());
+    }
+
+    private void updateExcursionCount() {
+        if (excursionCountLabel != null) {
+            excursionCountLabel.setText(String.valueOf(excursionsData.size()));
+        }
     }
 
     @FXML
@@ -134,8 +170,8 @@ public class ExcursionManagementController {
                 String.format("%.2f BYN", studio.calculateCost(excursion)));
     }
 
-    private void handleDeleteExcursion(Excursion excursion) {
-        int index = findExcursionIndex(excursion);
+    private void handleDeleteExcursion(ExcursionTableModel excursionModel) {
+        int index = findExcursionIndex(excursionModel);
         if (index != -1) {
             studio.removeExcursion(index);
             loadExcursionsData();
@@ -143,9 +179,10 @@ public class ExcursionManagementController {
         }
     }
 
-    private int findExcursionIndex(Excursion target) {
-        for (int i = 0; i < studio.getExcursions().size(); i++) {
-            AbstractExcursion excursion = studio.getExcursions().get(i);
+    private int findExcursionIndex(ExcursionTableModel target) {
+        List<AbstractExcursion> excursions = studio.getExcursions();
+        for (int i = 0; i < excursions.size(); i++) {
+            AbstractExcursion excursion = excursions.get(i);
             if (excursion instanceof Excursion) {
                 Excursion current = (Excursion) excursion;
                 if (current.getPlace().equals(target.getPlace()) &&
@@ -162,7 +199,6 @@ public class ExcursionManagementController {
     @FXML
     private void handleBack() {
         try {
-            // ИСПРАВЛЕННЫЙ ПУТЬ
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/admin_dashboard.fxml"));
             Stage stage = (Stage) placeField.getScene().getWindow();
             stage.setScene(new Scene(root, 800, 600));
@@ -177,6 +213,7 @@ public class ExcursionManagementController {
         dayComboBox.setValue(null);
         timeComboBox.setValue(null);
         guideComboBox.setValue(null);
+        placeField.requestFocus(); // Фокус на первое поле
     }
 
     private void showAlert(AlertType type, String title, String message) {
