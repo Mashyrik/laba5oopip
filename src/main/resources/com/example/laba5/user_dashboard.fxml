@@ -7,7 +7,8 @@
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.laba5.UserDashboardController"
-            stylesheets="@styles.css">
+            stylesheets="@styles.css"
+            prefWidth="1200" prefHeight="800">
 
     <top>
         <VBox styleClass="header">
@@ -17,10 +18,11 @@
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="30" style="-fx-padding: 40;">
+        <VBox alignment="CENTER" spacing="30" style="-fx-padding: 40;" VBox.vgrow="ALWAYS">
             <Label text="Доступные функции" styleClass="title-medium"/>
 
-            <VBox spacing="20" alignment="CENTER" styleClass="form-container" style="-fx-pref-width: 500px;">
+            <VBox spacing="20" alignment="CENTER" styleClass="form-container"
+                  style="-fx-pref-width: 500px; -fx-max-width: 500px;">
                 <VBox spacing="15" alignment="CENTER">
                     <Button text="🔍 Просмотр экскурсий" onAction="#handleViewExcursions"
                             styleClass="btn-primary" style="-fx-pref-width: 300px; -fx-pref-height: 50px; -fx-font-size: 16px;"/>
@@ -31,7 +33,7 @@
             </VBox>
 
             <!-- Информация -->
-            <VBox styleClass="section-container" style="-fx-pref-width: 500px;">
+            <VBox styleClass="section-container" style="-fx-pref-width: 500px; -fx-max-width: 500px;">
                 <Label text="Информация" styleClass="title-small" style="-fx-padding: 0 0 10 0;"/>
                 <VBox spacing="8">
                     <Label text="• Просмотр всех доступных экскурсий" styleClass="label-info"/>

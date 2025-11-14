@@ -86,14 +86,13 @@ public class ExcursionManagementController {
         timeColumn.setCellValueFactory(new PropertyValueFactory<>("timeOfDay"));
         guideColumn.setCellValueFactory(new PropertyValueFactory<>("guideLevel"));
         costColumn.setCellValueFactory(new PropertyValueFactory<>("cost"));
-        actionColumn.setCellValueFactory(new PropertyValueFactory<>("actions"));
 
         // Убираем пустой столбец справа
         excursionsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        // Кастомная колонка для действий
+        // Кастомная колонка для действий (ТОЛЬКО cellFactory, НЕТ cellValueFactory)
         actionColumn.setCellFactory(column -> new TableCell<ExcursionTableModel, String>() {
-            private final Button deleteButton = new Button("Удалить");
+            private final Button deleteButton = new Button("🗑️");
 
             {
                 deleteButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 12px; -fx-pref-width: 60px;");

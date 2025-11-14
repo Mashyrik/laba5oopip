@@ -7,7 +7,8 @@
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.laba5.AdminDashboardController"
-            stylesheets="@styles.css">
+            stylesheets="@styles.css"
+            prefWidth="1200" prefHeight="800">
 
     <top>
         <VBox styleClass="header">
@@ -17,10 +18,11 @@
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="30" style="-fx-padding: 40;">
+        <VBox alignment="CENTER" spacing="30" style="-fx-padding: 40;" VBox.vgrow="ALWAYS">
             <Label text="Функции администратора" styleClass="title-medium"/>
 
-            <VBox spacing="20" alignment="CENTER" styleClass="form-container" style="-fx-pref-width: 500px;">
+            <VBox spacing="20" alignment="CENTER" styleClass="form-container"
+                  style="-fx-pref-width: 500px; -fx-max-width: 500px;">
                 <VBox spacing="15" alignment="CENTER">
                     <Button text="📋 Управление экскурсиями" onAction="#handleExcursions"
                             styleClass="btn-primary" style="-fx-pref-width: 300px; -fx-pref-height: 50px; -fx-font-size: 16px;"/>
@@ -34,11 +36,12 @@
             </VBox>
 
             <!-- Статистика -->
-            <VBox styleClass="section-container" style="-fx-pref-width: 500px;">
-                <Label text="Функционал" styleClass="title-small" style="-fx-padding: 0 0 10 0;"/>
+            <VBox styleClass="section-container" style="-fx-pref-width: 500px; -fx-max-width: 500px;">
+                <Label text="📊 Быстрая статистика" styleClass="title-small" style="-fx-padding: 0 0 10 0;"/>
                 <VBox spacing="8">
                     <Label text="• Управление экскурсиями: добавление, редактирование, удаление" styleClass="label-info"/>
                     <Label text="• Управление пользователями: блокировка, разблокировка" styleClass="label-info"/>
+                    <Label text="• Просмотр статистики и отчетов" styleClass="label-info"/>
                 </VBox>
             </VBox>
         </VBox>

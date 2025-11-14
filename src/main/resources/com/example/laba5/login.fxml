@@ -7,10 +7,11 @@
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.laba5.LoginController"
-            stylesheets="@styles.css">
+            stylesheets="@styles.css"
+            prefWidth="1000" prefHeight="700">
 
     <center>
-        <VBox alignment="CENTER" spacing="30" style="-fx-padding: 50;">
+        <VBox alignment="CENTER" spacing="30" style="-fx-padding: 50;" VBox.vgrow="ALWAYS">
             <!-- Заголовок -->
             <VBox alignment="CENTER" spacing="8">
                 <Label text="🚗 ТурЭкскурс" styleClass="title-large"/>
@@ -18,7 +19,8 @@
             </VBox>
 
             <!-- Форма входа -->
-            <VBox alignment="CENTER" spacing="25" styleClass="form-container" style="-fx-pref-width: 400px;">
+            <VBox alignment="CENTER" spacing="25" styleClass="form-container"
+                  style="-fx-pref-width: 400px; -fx-max-width: 400px;">
                 <Label text="Вход в систему" styleClass="title-small"/>
 
                 <VBox spacing="20" style="-fx-pref-width: 350px;">
@@ -37,9 +39,14 @@
 
                 <!-- Кнопки -->
                 <VBox spacing="12" alignment="CENTER" style="-fx-pref-width: 350px;">
-                    <Button text="Войти" onAction="#handleLogin" styleClass="btn-primary" style="-fx-pref-width: 350px; -fx-pref-height: 45px;"/>
-                    <Button text="Зарегистрироваться" onAction="#handleRegister" styleClass="btn-secondary" style="-fx-pref-width: 350px; -fx-pref-height: 45px;"/>
+                    <Button text="Войти" onAction="#handleLogin" styleClass="btn-primary"
+                            style="-fx-pref-width: 350px; -fx-pref-height: 45px;"/>
+                    <Button text="Зарегистрироваться" onAction="#handleRegister" styleClass="btn-secondary"
+                            style="-fx-pref-width: 350px; -fx-pref-height: 45px;"/>
                 </VBox>
+
+                <!-- Подсказка -->
+                <Label text="Тестовые аккаунты: admin/admin123, user/user123" styleClass="label-info"/>
             </VBox>
         </VBox>
     </center>

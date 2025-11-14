@@ -7,10 +7,11 @@
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.laba5.RegisterController"
-            stylesheets="@styles.css">
+            stylesheets="@styles.css"
+            prefWidth="1000" prefHeight="700">
 
     <center>
-        <VBox alignment="CENTER" spacing="30" style="-fx-padding: 40;">
+        <VBox alignment="CENTER" spacing="30" style="-fx-padding: 40;" VBox.vgrow="ALWAYS">
             <!-- Заголовок -->
             <VBox alignment="CENTER" spacing="8">
                 <Label text="🚗 ТурЭкскурс" styleClass="title-large"/>
@@ -18,10 +19,11 @@
             </VBox>
 
             <!-- Форма регистрации -->
-            <VBox alignment="CENTER" spacing="25" styleClass="form-container" style="-fx-pref-width: 400px;">
+            <VBox alignment="CENTER" spacing="25" styleClass="form-container"
+                  style="-fx-pref-width: 450px; -fx-max-width: 450px;">
                 <Label text="Регистрация" styleClass="title-small"/>
 
-                <VBox spacing="15" style="-fx-pref-width: 350px;">
+                <VBox spacing="15" style="-fx-pref-width: 400px;">
                     <!-- Логин -->
                     <VBox spacing="8">
                         <Label text="Логин:" styleClass="label-bold"/>
@@ -43,15 +45,18 @@
 
                 <!-- Кнопки -->
                 <HBox spacing="15" alignment="CENTER">
-                    <Button text="Зарегистрироваться" onAction="#handleRegister" styleClass="btn-success" style="-fx-pref-width: 180px; -fx-pref-height: 45px;"/>
-                    <Button text="Назад" onAction="#handleBackToLogin" styleClass="btn-secondary" style="-fx-pref-width: 120px; -fx-pref-height: 45px;"/>
+                    <Button text="Зарегистрироваться" onAction="#handleRegister" styleClass="btn-success"
+                            style="-fx-pref-width: 200px; -fx-pref-height: 45px;"/>
+                    <Button text="Назад" onAction="#handleBackToLogin" styleClass="btn-secondary"
+                            style="-fx-pref-width: 140px; -fx-pref-height: 45px;"/>
                 </HBox>
 
                 <!-- Требования -->
-                <VBox spacing="5" style="-fx-pref-width: 350px;">
+                <VBox spacing="5" style="-fx-pref-width: 400px;">
                     <Label text="Требования:" styleClass="label-bold"/>
                     <Label text="• Логин: минимум 3 символа" styleClass="label-info"/>
                     <Label text="• Пароль: минимум 4 символа" styleClass="label-info"/>
+                    <Label text="• Пароли должны совпадать" styleClass="label-info"/>
                 </VBox>
             </VBox>
         </VBox>

@@ -8,7 +8,8 @@
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.laba5.UserExcursionsController"
-            stylesheets="@styles.css">
+            stylesheets="@styles.css"
+            prefWidth="1400" prefHeight="900">
 
     <top>
         <VBox styleClass="header">
@@ -23,62 +24,62 @@
     </top>
 
     <left>
-        <VBox spacing="20" style="-fx-padding: 20; -fx-pref-width: 280px;">
+        <VBox spacing="20" style="-fx-padding: 20; -fx-pref-width: 300px; -fx-min-width: 300px; -fx-max-width: 300px;">
             <!-- Фильтры -->
-            <VBox styleClass="form-container">
+            <VBox styleClass="form-container" VBox.vgrow="NEVER">
                 <Label text="🔍 Фильтры" styleClass="title-small" style="-fx-padding: 0 0 15 0;"/>
 
                 <VBox spacing="12">
                     <VBox spacing="5">
                         <Label text="День недели:" styleClass="label-bold"/>
-                        <ComboBox fx:id="dayFilterComboBox" style="-fx-pref-height: 40px; -fx-background-radius: 8px; -fx-pref-width: 240px;"/>
+                        <ComboBox fx:id="dayFilterComboBox" style="-fx-pref-height: 40px; -fx-background-radius: 8px; -fx-pref-width: 260px;"/>
                     </VBox>
 
                     <VBox spacing="5">
                         <Label text="Квалификация гида:" styleClass="label-bold"/>
-                        <ComboBox fx:id="guideFilterComboBox" style="-fx-pref-height: 40px; -fx-background-radius: 8px; -fx-pref-width: 240px;"/>
+                        <ComboBox fx:id="guideFilterComboBox" style="-fx-pref-height: 40px; -fx-background-radius: 8px; -fx-pref-width: 260px;"/>
                     </VBox>
                 </VBox>
 
                 <VBox spacing="8" style="-fx-padding: 10 0 0 0;">
                     <Button text="Применить" onAction="#handleApplyFilters"
-                            styleClass="btn-primary" style="-fx-pref-width: 240px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
+                            styleClass="btn-primary" style="-fx-pref-width: 260px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
                     <Button text="Сбросить" onAction="#handleResetFilters"
-                            styleClass="btn-secondary" style="-fx-pref-width: 240px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
+                            styleClass="btn-secondary" style="-fx-pref-width: 260px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
                 </VBox>
             </VBox>
 
             <!-- Сортировка -->
-            <VBox styleClass="form-container">
+            <VBox styleClass="form-container" VBox.vgrow="NEVER">
                 <Label text="📊 Сортировка" styleClass="title-small" style="-fx-padding: 0 0 15 0;"/>
 
                 <VBox spacing="8">
                     <Button text="Возрастание" onAction="#handleSortAscending"
-                            styleClass="btn-primary" style="-fx-pref-width: 240px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
+                            styleClass="btn-primary" style="-fx-pref-width: 260px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
                     <Button text="Убывание" onAction="#handleSortDescending"
-                            styleClass="btn-warning" style="-fx-pref-width: 240px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
+                            styleClass="btn-warning" style="-fx-pref-width: 260px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
                     <Button text="Отмена" onAction="#handleCancelSort"
-                            styleClass="btn-secondary" style="-fx-pref-width: 240px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
+                            styleClass="btn-secondary" style="-fx-pref-width: 260px; -fx-pref-height: 40px; -fx-font-size: 14px;"/>
                 </VBox>
             </VBox>
 
             <!-- Расчет стоимости -->
-            <VBox styleClass="form-container">
+            <VBox styleClass="form-container" VBox.vgrow="ALWAYS">
                 <Label text="💰 Расчет стоимости" styleClass="title-small" style="-fx-padding: 0 0 15 0;"/>
 
                 <VBox spacing="10">
                     <Label fx:id="costLabel" text="Выберите экскурсию из списка"
-                           styleClass="label-info" style="-fx-pref-height: 80px; -fx-wrap-text: true; -fx-pref-width: 240px; -fx-background-color: #f8f9fa; -fx-padding: 10px; -fx-border-radius: 5px;"/>
+                           styleClass="label-info" style="-fx-pref-height: 80px; -fx-wrap-text: true; -fx-pref-width: 260px; -fx-background-color: #f8f9fa; -fx-padding: 10px; -fx-border-radius: 5px;"/>
 
                     <Button text="Рассчитать стоимость" onAction="#handleCalculateCost"
-                            styleClass="btn-success" style="-fx-pref-width: 240px; -fx-pref-height: 45px; -fx-font-size: 14px;"/>
+                            styleClass="btn-success" style="-fx-pref-width: 260px; -fx-pref-height: 45px; -fx-font-size: 14px;"/>
                 </VBox>
             </VBox>
         </VBox>
     </left>
 
     <center>
-        <VBox spacing="15" style="-fx-padding: 20;">
+        <VBox spacing="15" style="-fx-padding: 20;" VBox.vgrow="ALWAYS">
             <Label text="🎯 Доступные экскурсии" styleClass="title-small"/>
 
             <!-- Контейнер для карточек экскурсий с скроллом -->

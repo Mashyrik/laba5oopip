@@ -36,11 +36,11 @@ public class UserManagementController {
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
 
         // Колонка статуса
-        statusColumn.setCellValueFactory(cellData -> {
-            User user = cellData.getValue();
-            String status = user.isBlocked() ? "Заблокирован" : "Активен";
-            return new javafx.beans.property.SimpleStringProperty(status);
-        });
+//        statusColumn.setCellValueFactory(cellData -> {
+//            User user = cellData.getValue();
+//            String status = user.isBlocked() ? "Заблокирован" : "Активен";
+//            return new javafx.beans.property.SimpleStringProperty(status);
+//        });
 
         // Колонка действий
         actionsColumn.setCellFactory(column -> new javafx.scene.control.TableCell<User, String>() {

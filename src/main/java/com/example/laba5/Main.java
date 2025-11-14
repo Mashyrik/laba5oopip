@@ -13,9 +13,11 @@ public class Main extends Application {
         // Загружаем стартовый экран входа
         Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/login.fxml"));
 
-        Scene scene = new Scene(root, 600, 400);
-        primaryStage.setTitle("Экскурсионная студия");
+        Scene scene = new Scene(root); // Без фиксированного размера
+        primaryStage.setTitle("Экскурсионная студия - ТурЭкскурс");
         primaryStage.setScene(scene);
+        primaryStage.setMinWidth(1000); // Минимальные размеры
+        primaryStage.setMinHeight(700);
         primaryStage.show();
 
         System.out.println("✅ Приложение запущено успешно!");

@@ -8,7 +8,8 @@
 <BorderPane xmlns="http://javafx.com/javafx/11.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.example.laba5.UserManagementController"
-            stylesheets="@styles.css">
+            stylesheets="@styles.css"
+            prefWidth="1200" prefHeight="800">
 
     <top>
         <VBox styleClass="header">
@@ -24,34 +25,34 @@
     </top>
 
     <center>
-        <VBox spacing="20" style="-fx-padding: 25;">
+        <VBox spacing="20" style="-fx-padding: 25;" VBox.vgrow="ALWAYS">
             <!-- Таблица пользователей -->
-            <VBox styleClass="section-container">
+            <VBox styleClass="section-container" VBox.vgrow="ALWAYS">
                 <Label text="👥 Список пользователей" styleClass="title-small" style="-fx-padding: 0 0 15 0;"/>
-                <TableView fx:id="usersTable" style="-fx-pref-height: 400px;">
+                <TableView fx:id="usersTable" VBox.vgrow="ALWAYS">
                     <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                     </columnResizePolicy>
                     <columns>
-                        <TableColumn prefWidth="200" text="Логин">
+                        <TableColumn prefWidth="250" text="Логин">
                             <cellValueFactory>
                                 <PropertyValueFactory property="username" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="120" text="Роль">
+                        <TableColumn prefWidth="150" text="Роль">
                             <cellValueFactory>
                                 <PropertyValueFactory property="role" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="120" text="Статус"/>
-                        <TableColumn prefWidth="200" text="Действия" resizable="false"/>
+                        <TableColumn prefWidth="150" text="Статус"/>
+                        <TableColumn prefWidth="250" text="Действия" resizable="false"/>
                     </columns>
                 </TableView>
             </VBox>
 
             <!-- Легенда -->
-            <VBox styleClass="section-container" style="-fx-pref-width: 600px;">
-                <Label text="Информация" styleClass="title-small" style="-fx-padding: 0 0 10 0;"/>
+            <VBox styleClass="section-container" style="-fx-pref-width: 600px; -fx-max-width: 600px;">
+                <Label text="ℹ️ Информация" styleClass="title-small" style="-fx-padding: 0 0 10 0;"/>
                 <VBox spacing="8">
                     <Label text="• Зеленый - пользователь активен" styleClass="label-info"/>
                     <Label text="• Красный - пользователь заблокирован" styleClass="label-info"/>
