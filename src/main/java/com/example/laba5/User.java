@@ -20,7 +20,9 @@ public class User implements Serializable {
     public String getPassword() { return password; }
     public UserRole getRole() { return role; }
     public boolean isBlocked() { return blocked; }
-
+    public String getStatus() {
+        return isBlocked() ? "Заблокирован" : "Активен";
+    }
     // Сеттеры
     public void setBlocked(boolean blocked) { this.blocked = blocked; }
     public void setRole(UserRole role) { this.role = role; } // Добавьте этот сеттер

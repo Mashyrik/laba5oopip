@@ -4,14 +4,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.layout.HBox;
 
 public class UserManagementController {
 
@@ -27,6 +27,7 @@ public class UserManagementController {
     }
 
     private void initializeTable() {
+        // Настраиваем колонки таблицы
         TableColumn<User, String> usernameColumn = (TableColumn<User, String>) usersTable.getColumns().get(0);
         TableColumn<User, String> roleColumn = (TableColumn<User, String>) usersTable.getColumns().get(1);
         TableColumn<User, String> statusColumn = (TableColumn<User, String>) usersTable.getColumns().get(2);
@@ -35,18 +36,37 @@ public class UserManagementController {
         usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
         roleColumn.setCellValueFactory(new PropertyValueFactory<>("role"));
 
-        // Колонка статуса
-//        statusColumn.setCellValueFactory(cellData -> {
-//            User user = cellData.getValue();
-//            String status = user.isBlocked() ? "Заблокирован" : "Активен";
-//            return new javafx.beans.property.SimpleStringProperty(status);
-//        });
+        // ТОЛЬКО cellFactory для колонки статуса
+        statusColumn.setCellFactory(column -> new TableCell<User, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    User user = getTableRow().getItem();
+                    if (user.isBlocked()) {
+                        setText("🚫 Заблокирован");
+                        setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold; -fx-alignment: CENTER;");
+                    } else {
+                        setText("✅ Активен");
+                        setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold; -fx-alignment: CENTER;");
+                    }
+                }
+            }
+        });
 
-        // Колонка действий
-        actionsColumn.setCellFactory(column -> new javafx.scene.control.TableCell<User, String>() {
-            private final javafx.scene.layout.HBox buttonContainer = new javafx.scene.layout.HBox(5);
-            private final javafx.scene.control.Button blockButton = new javafx.scene.control.Button("Заблокировать");
-            private final javafx.scene.control.Button unblockButton = new javafx.scene.control.Button("Разблокировать");
+        // Отключаем сортировку
+        usersTable.setSortPolicy(param -> false);
+
+        // Настраиваем колонку действий
+        actionsColumn.setCellValueFactory(cellData -> new SimpleStringProperty(""));
+
+        actionsColumn.setCellFactory(column -> new TableCell<User, String>() {
+            private final HBox buttonContainer = new HBox(5);
+            private final Button blockButton = new Button("Заблокировать");
+            private final Button unblockButton = new Button("Разблокировать");
 
             {
                 blockButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 12px;");
@@ -68,7 +88,7 @@ public class UserManagementController {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty) {
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
                     setGraphic(null);
                 } else {
                     User user = getTableView().getItems().get(getIndex());

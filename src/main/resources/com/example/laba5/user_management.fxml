@@ -44,7 +44,11 @@
                                 <PropertyValueFactory property="role" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="150" text="Статус"/>
+                        <TableColumn prefWidth="150" text="Статус">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="status" />
+                            </cellValueFactory>
+                        </TableColumn>
                         <TableColumn prefWidth="200" text="Действия">
                             <!-- НИЧЕГО НЕ ДОЛЖНО БЫТЬ ВНУТРИ -->
                         </TableColumn>
