@@ -87,10 +87,13 @@ public class ExcursionManagementController {
         guideColumn.setCellValueFactory(new PropertyValueFactory<>("guideLevel"));
         costColumn.setCellValueFactory(new PropertyValueFactory<>("cost"));
 
+        // Добавьте пустой cellValueFactory для колонки действий
+        actionColumn.setCellValueFactory(cellData -> new SimpleStringProperty(""));
+
         // Убираем пустой столбец справа
         excursionsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-        // Кастомная колонка для действий (ТОЛЬКО cellFactory, НЕТ cellValueFactory)
+        // cellFactory для кнопки удаления
         actionColumn.setCellFactory(column -> new TableCell<ExcursionTableModel, String>() {
             private final Button deleteButton = new Button("🗑️");
 

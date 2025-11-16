@@ -69,38 +69,36 @@
 
             <!-- ПРАВАЯ ЧАСТЬ - Таблица экскурсий -->
             <VBox spacing="15" style="-fx-pref-width: 800px;">
-                <!-- Адаптивная таблица -->
+                <!-- Таблица экскурсий -->
                 <TableView fx:id="excursionsTable" style="-fx-pref-height: 500px; -fx-background-radius: 12px; -fx-border-radius: 12px;" VBox.vgrow="ALWAYS">
-                    <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                    </columnResizePolicy>
                     <columns>
-                        <TableColumn prefWidth="200" text="Место" style="-fx-alignment: CENTER_LEFT;">
+                        <TableColumn prefWidth="140" text="Место" sortable="false">
                             <cellValueFactory>
                                 <PropertyValueFactory property="place" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="120" text="День" style="-fx-alignment: CENTER;">
+                        <TableColumn prefWidth="90" text="День" sortable="false">
                             <cellValueFactory>
                                 <PropertyValueFactory property="dayType" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="120" text="Время" style="-fx-alignment: CENTER;">
+                        <TableColumn prefWidth="90" text="Время" sortable="false">
                             <cellValueFactory>
                                 <PropertyValueFactory property="timeOfDay" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="180" text="Квалификация гида" style="-fx-alignment: CENTER;">
+                        <TableColumn prefWidth="180" text="Квалификация гида" sortable="false">
                             <cellValueFactory>
                                 <PropertyValueFactory property="guideLevel" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="150" text="Стоимость" style="-fx-alignment: CENTER;">
+                        <TableColumn prefWidth="110" text="Стоимость" sortable="false">
                             <cellValueFactory>
                                 <PropertyValueFactory property="cost" />
                             </cellValueFactory>
                         </TableColumn>
-                        <TableColumn prefWidth="100" text="Действия" style="-fx-alignment: CENTER;" resizable="false">
+                        <TableColumn prefWidth="90" text="Действия" sortable="false">
+                            <!-- НИЧЕГО НЕ ДОЛЖНО БЫТЬ ВНУТРИ -->
                         </TableColumn>
                     </columns>
                 </TableView>
