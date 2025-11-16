@@ -83,7 +83,7 @@ public class UserExcursionsController {
     private VBox createExcursionCard(Excursion excursion) {
         VBox card = new VBox();
         card.getStyleClass().add("form-container");
-        card.setStyle("-fx-pref-width: 260px; -fx-pref-height: 170px; -fx-padding: 15px; -fx-spacing: 10px; -fx-cursor: hand; -fx-alignment: center;");
+        card.setStyle("-fx-pref-width: 240px; -fx-pref-height: 170px; -fx-padding: 15px; -fx-spacing: 10px; -fx-cursor: hand; -fx-alignment: center;");
 
         // Заголовок карточки
         Label titleLabel = new Label("🚗 " + excursion.getPlace());
