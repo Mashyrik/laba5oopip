@@ -85,20 +85,6 @@ public class LoginController {
     }
 
     private void showAlert(AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-
-        // Добавляем иконку в алерт
-        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-        try {
-            Image icon = new Image(getClass().getResourceAsStream("/com/example/laba5/icon.png"));
-            stage.getIcons().add(icon);
-        } catch (Exception e) {
-            // Иконка не обязательна для алертов
-        }
-
-        alert.showAndWait();
+        AlertUtil.showAlert(type, title, message);
     }
 }
