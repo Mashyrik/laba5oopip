@@ -67,10 +67,9 @@ public class RegisterController {
     @FXML
     private void handleBackToLogin() {
         try {
-            // ИСПРАВЛЕННЫЙ ПУТЬ
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/login.fxml"));
             Stage stage = (Stage) usernameField.getScene().getWindow();
-            stage.setScene(new Scene(root, 600, 400));
+            stage.getScene().setRoot(root);
         } catch (Exception e) {
             showAlert(AlertType.ERROR, "Ошибка", "Не удалось вернуться к входу: " + e.getMessage());
         }

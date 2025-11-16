@@ -30,7 +30,6 @@ public class AdminDashboardController {
         try {
             System.out.println("Пытаемся загрузить excursion_management.fxml...");
 
-            // Проверяем существование файла
             java.net.URL fxmlUrl = getClass().getResource("/com/example/laba5/excursion_management.fxml");
             System.out.println("URL файла: " + fxmlUrl);
 
@@ -43,7 +42,7 @@ public class AdminDashboardController {
             System.out.println("✅ Файл найден, загружаем...");
             Parent root = FXMLLoader.load(fxmlUrl);
             Stage stage = (Stage) welcomeLabel.getScene().getWindow();
-            stage.setScene(new Scene(root, 800, 600));
+            stage.getScene().setRoot(root);
 
         } catch (Exception e) {
             System.out.println("❌ Ошибка загрузки: " + e.getMessage());
@@ -58,7 +57,7 @@ public class AdminDashboardController {
             System.out.println("Переход к управлению пользователями...");
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/user_management.fxml"));
             Stage stage = (Stage) welcomeLabel.getScene().getWindow();
-            stage.setScene(new Scene(root, 900, 600));
+            stage.getScene().setRoot(root);
             stage.setTitle("Управление пользователями");
         } catch (Exception e) {
             System.out.println("❌ Ошибка загрузки управления пользователями: " + e.getMessage());
@@ -73,7 +72,7 @@ public class AdminDashboardController {
             userManager.logout();
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/login.fxml"));
             Stage stage = (Stage) welcomeLabel.getScene().getWindow();
-            stage.setScene(new Scene(root, 600, 400));
+            stage.getScene().setRoot(root);
         } catch (Exception e) {
             showAlert(AlertType.ERROR, "Ошибка", "Не удалось выйти: " + e.getMessage());
         }

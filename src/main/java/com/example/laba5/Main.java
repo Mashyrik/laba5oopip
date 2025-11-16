@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -13,11 +14,19 @@ public class Main extends Application {
         // Загружаем стартовый экран входа
         Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/login.fxml"));
 
-        Scene scene = new Scene(root); // Без фиксированного размера
+        Scene scene = new Scene(root);
         primaryStage.setTitle("Экскурсионная студия - ТурЭкскурс");
         primaryStage.setScene(scene);
-        primaryStage.setMinWidth(1000); // Минимальные размеры
-        primaryStage.setMinHeight(700);
+        primaryStage.setMaximized(true); // ← ПОЛНОЭКРАННЫЙ РЕЖИМ
+
+        // Добавляем иконку
+        try {
+            Image icon = new Image(getClass().getResourceAsStream("/com/example/laba5/icon.png"));
+            primaryStage.getIcons().add(icon);
+        } catch (Exception e) {
+            System.out.println("⚠️ Иконка не найдена, но приложение запустится");
+        }
+
         primaryStage.show();
 
         System.out.println("✅ Приложение запущено успешно!");

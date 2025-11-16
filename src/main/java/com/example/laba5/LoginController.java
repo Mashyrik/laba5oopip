@@ -60,7 +60,7 @@ public class LoginController {
 
                 Parent root = FXMLLoader.load(getClass().getResource(fxmlFile));
                 Stage stage = (Stage) usernameField.getScene().getWindow();
-                stage.setScene(new Scene(root, 1000, 700));
+                stage.getScene().setRoot(root);
                 stage.setTitle(currentUser.isAdmin() ? "Панель администратора - ТурЭкскурс" : "Панель пользователя - ТурЭкскурс");
 
             } catch (Exception e) {
@@ -77,7 +77,7 @@ public class LoginController {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/register.fxml"));
             Stage stage = (Stage) usernameField.getScene().getWindow();
-            stage.setScene(new Scene(root, 600, 500));
+            stage.getScene().setRoot(root);
             stage.setTitle("Регистрация - ТурЭкскурс");
         } catch (Exception e) {
             showAlert(AlertType.ERROR, "Ошибка", "Не удалось открыть форму регистрации");

@@ -279,7 +279,7 @@ public class UserExcursionsController {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/user_dashboard.fxml"));
             Stage stage = (Stage) excursionsContainer.getScene().getWindow();
-            stage.setScene(new Scene(root, 800, 600));
+            stage.getScene().setRoot(root);
         } catch (Exception e) {
             showAlert(AlertType.ERROR, "Ошибка", "Не удалось вернуться: " + e.getMessage());
         }

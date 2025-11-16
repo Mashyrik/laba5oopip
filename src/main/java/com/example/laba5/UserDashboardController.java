@@ -27,7 +27,7 @@ public class UserDashboardController {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/user_excursions.fxml"));
             Stage stage = (Stage) welcomeLabel.getScene().getWindow();
-            stage.setScene(new Scene(root, 1200, 700));
+            stage.getScene().setRoot(root);
         } catch (Exception e) {
             showAlert(AlertType.ERROR, "Ошибка", "Не удалось открыть просмотр экскурсий: " + e.getMessage());
         }
@@ -39,7 +39,7 @@ public class UserDashboardController {
             userManager.logout();
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/login.fxml"));
             Stage stage = (Stage) welcomeLabel.getScene().getWindow();
-            stage.setScene(new Scene(root, 600, 400));
+            stage.getScene().setRoot(root);
         } catch (Exception e) {
             showAlert(AlertType.ERROR, "Ошибка", "Не удалось выйти: " + e.getMessage());
         }
