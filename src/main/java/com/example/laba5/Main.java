@@ -11,15 +11,17 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // Загружаем стартовый экран входа
         Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/login.fxml"));
 
         Scene scene = new Scene(root);
         primaryStage.setTitle("Экскурсионная студия - ТурЭкскурс");
         primaryStage.setScene(scene);
-        primaryStage.setMaximized(true); // ← ПОЛНОЭКРАННЫЙ РЕЖИМ
 
-        // Добавляем иконку
+        // Устанавливаем начальные минимальные размеры
+        primaryStage.setMinWidth(1000);
+        primaryStage.setMinHeight(700);
+        primaryStage.setMaximized(true);
+
         try {
             Image icon = new Image(getClass().getResourceAsStream("/com/example/laba5/icon.png"));
             primaryStage.getIcons().add(icon);
@@ -28,11 +30,5 @@ public class Main extends Application {
         }
 
         primaryStage.show();
-
-        System.out.println("✅ Приложение запущено успешно!");
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

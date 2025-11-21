@@ -45,8 +45,6 @@
                             style="-fx-pref-width: 350px; -fx-pref-height: 45px;"/>
                 </VBox>
 
-                <!-- Подсказка -->
-                <Label text="Тестовые аккаунты: admin/admin123, user/user123" styleClass="label-info"/>
             </VBox>
         </VBox>
     </center>

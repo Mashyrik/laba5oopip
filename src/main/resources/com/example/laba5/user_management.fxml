@@ -58,7 +58,7 @@
 
             <!-- Легенда -->
             <VBox styleClass="section-container" style="-fx-pref-width: 600px; -fx-max-width: 600px;">
-                <Label text="ℹ️ Информация" styleClass="title-small" style="-fx-padding: 0 0 10 0;"/>
+                <Label text="Информация" styleClass="title-small" style="-fx-padding: 0 0 10 0;"/>
                 <VBox spacing="8">
                     <Label text="• Зеленый - пользователь активен" styleClass="label-info"/>
                     <Label text="• Красный - пользователь заблокирован" styleClass="label-info"/>

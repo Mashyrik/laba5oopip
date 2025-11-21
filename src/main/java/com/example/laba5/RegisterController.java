@@ -1,5 +1,6 @@
 package com.example.laba5;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,6 +24,13 @@ public class RegisterController {
         setupField(usernameField, "Введите логин");
         setupField(passwordField, "Введите пароль");
         setupField(confirmPasswordField, "Подтвердите пароль");
+
+        // Устанавливаем минимальные размеры когда сцена готова
+        Platform.runLater(() -> {
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            stage.setMinWidth(1000);
+            stage.setMinHeight(700);
+        });
     }
 
     private void setupField(TextField field, String prompt) {

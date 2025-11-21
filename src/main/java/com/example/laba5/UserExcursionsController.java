@@ -1,5 +1,6 @@
 package com.example.laba5;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -38,9 +39,15 @@ public class UserExcursionsController {
     private void initialize() {
         studio.loadFromFile();
         originalOrder = new ArrayList<>(studio.getExcursions());
-
         initializeFilters();
         loadExcursionsData();
+
+        // Устанавливаем минимальные размеры когда сцена готова
+        Platform.runLater(() -> {
+            Stage stage = (Stage) excursionsContainer.getScene().getWindow();
+            stage.setMinWidth(750);
+            stage.setMinHeight(900);
+        });
     }
 
     private void initializeFilters() {
@@ -83,13 +90,20 @@ public class UserExcursionsController {
     private VBox createExcursionCard(Excursion excursion) {
         VBox card = new VBox();
         card.getStyleClass().add("form-container");
-        card.setStyle("-fx-pref-width: 240px; -fx-pref-height: 170px; -fx-padding: 15px; -fx-spacing: 10px; -fx-cursor: hand; -fx-alignment: center;");
+
+        // Базовые стили карточки (одинаковые для всех состояний)
+        String baseStyle = "-fx-pref-width: 300px; -fx-min-width: 300px; -fx-max-width: 300px; " +
+                "-fx-pref-height: 180px; -fx-min-height: 180px; " +
+                "-fx-padding: 15px; -fx-spacing: 10px; -fx-cursor: hand; -fx-alignment: center; " +
+                "-fx-background-color: white;";
+
+        card.setStyle(baseStyle);
 
         // Заголовок карточки
         Label titleLabel = new Label("🚗 " + excursion.getPlace());
-        titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-text-alignment: center;");
+        titleLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-text-alignment: center;");
         titleLabel.setWrapText(true);
-        titleLabel.setMaxWidth(240);
+        titleLabel.setMaxWidth(280);
         titleLabel.setAlignment(javafx.geometry.Pos.CENTER);
 
         // Детали экскурсии
@@ -113,22 +127,28 @@ public class UserExcursionsController {
         card.getChildren().addAll(titleLabel, dayLabel, timeLabel, guideLabel, costHintLabel);
 
         // Обработчик клика
-        card.setOnMouseClicked(event -> {
-            // Сбрасываем выделение у всех карточек
-            for (var child : excursionsContainer.getChildren()) {
-                if (child instanceof VBox) {
-                    child.setStyle("-fx-pref-width: 260px; -fx-pref-height: 170px; -fx-padding: 15px; -fx-spacing: 10px; -fx-cursor: hand; -fx-alignment: center; -fx-background-color: white;");
-                }
-            }
-
-            // Выделяем выбранную карточку
-            card.setStyle("-fx-pref-width: 260px; -fx-pref-height: 170px; -fx-padding: 15px; -fx-spacing: 10px; -fx-cursor: hand; -fx-alignment: center; -fx-background-color: #e3f2fd; -fx-border-color: #3498db; -fx-border-width: 2px;");
-
-            selectedExcursion = excursion;
-            costLabel.setText("Выбрана экскурсия: " + excursion.getPlace() + "\nНажмите 'Рассчитать стоимость'");
-        });
+        card.setOnMouseClicked(event -> handleCardSelection(card, excursion, baseStyle));
 
         return card;
+    }
+
+    private void handleCardSelection(VBox selectedCard, Excursion excursion, String baseStyle) {
+        // Сбрасываем выделение у всех карточек
+        for (var child : excursionsContainer.getChildren()) {
+            if (child instanceof VBox) {
+                ((VBox) child).setStyle(baseStyle);
+            }
+        }
+
+        // Выделяем выбранную карточку (используем внутреннюю тень вместо границы)
+        String selectedStyle = baseStyle +
+                "-fx-background-color: #e3f2fd; " +
+                "-fx-effect: dropshadow(three-pass-box, #3498db, 10, 0.5, 0, 0);";
+
+        selectedCard.setStyle(selectedStyle);
+
+        selectedExcursion = excursion;
+        costLabel.setText("Выбрана экскурсия: " + excursion.getPlace() + "\nНажмите 'Рассчитать стоимость'");
     }
 
     @FXML

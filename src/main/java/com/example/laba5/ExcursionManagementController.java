@@ -1,5 +1,6 @@
 package com.example.laba5;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -57,6 +58,13 @@ public class ExcursionManagementController {
         initializeTable();
         loadExcursionsData();
         updateExcursionCount();
+
+        // Устанавливаем минимальные размеры когда сцена готова
+        Platform.runLater(() -> {
+            Stage stage = (Stage) placeField.getScene().getWindow();
+            stage.setMinWidth(1200);
+            stage.setMinHeight(800);
+        });
     }
 
     private void initializeForm() {
@@ -95,10 +103,10 @@ public class ExcursionManagementController {
 
         // cellFactory для кнопки удаления
         actionColumn.setCellFactory(column -> new TableCell<ExcursionTableModel, String>() {
-            private final Button deleteButton = new Button("🗑️");
+            private final Button deleteButton = new Button("🗑");
 
             {
-                deleteButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 12px; -fx-pref-width: 60px;");
+                deleteButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-size: 12px; -fx-pref-width: 130px;");
                 deleteButton.setOnAction(event -> {
                     ExcursionTableModel excursionModel = getTableView().getItems().get(getIndex());
                     handleDeleteExcursion(excursionModel);

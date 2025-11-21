@@ -1,5 +1,6 @@
 package com.example.laba5;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,13 +21,18 @@ public class LoginController {
 
     @FXML
     private void initialize() {
-        // Настраиваем поведение полей ввода
         setupField(usernameField, "Введите логин");
         setupField(passwordField, "Введите пароль");
 
-        // Автоматический вход при нажатии Enter
         usernameField.setOnAction(e -> passwordField.requestFocus());
         passwordField.setOnAction(e -> handleLogin());
+
+        // Устанавливаем минимальные размеры когда сцена готова
+        Platform.runLater(() -> {
+            Stage stage = (Stage) usernameField.getScene().getWindow();
+            stage.setMinWidth(500);
+            stage.setMinHeight(500);
+        });
     }
 
     private void setupField(TextField field, String placeholder) {
@@ -61,6 +67,7 @@ public class LoginController {
                 Parent root = FXMLLoader.load(getClass().getResource(fxmlFile));
                 Stage stage = (Stage) usernameField.getScene().getWindow();
                 stage.getScene().setRoot(root);
+
                 stage.setTitle(currentUser.isAdmin() ? "Панель администратора - ТурЭкскурс" : "Панель пользователя - ТурЭкскурс");
 
             } catch (Exception e) {
@@ -78,6 +85,7 @@ public class LoginController {
             Parent root = FXMLLoader.load(getClass().getResource("/com/example/laba5/register.fxml"));
             Stage stage = (Stage) usernameField.getScene().getWindow();
             stage.getScene().setRoot(root);
+
             stage.setTitle("Регистрация - ТурЭкскурс");
         } catch (Exception e) {
             showAlert(AlertType.ERROR, "Ошибка", "Не удалось открыть форму регистрации");

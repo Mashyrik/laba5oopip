@@ -98,7 +98,7 @@
                             </cellValueFactory>
                         </TableColumn>
                         <TableColumn prefWidth="90" text="Действия" sortable="false">
-                            <!-- НИЧЕГО НЕ ДОЛЖНО БЫТЬ ВНУТРИ -->
+
                         </TableColumn>
                     </columns>
                 </TableView>

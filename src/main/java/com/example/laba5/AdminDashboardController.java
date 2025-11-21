@@ -1,5 +1,6 @@
 package com.example.laba5;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,6 +24,13 @@ public class AdminDashboardController {
             welcomeLabel.setText("Добро пожаловать, " + userManager.getCurrentUser().getUsername() + "!");
         }
         System.out.println("Загружено экскурсий: " + studio.getExcursions().size());
+
+        // Устанавливаем минимальные размеры когда сцена готова
+        Platform.runLater(() -> {
+            Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+            stage.setMinWidth(500);
+            stage.setMinHeight(650);
+        });
     }
 
     @FXML

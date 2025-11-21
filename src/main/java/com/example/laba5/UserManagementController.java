@@ -1,5 +1,6 @@
 package com.example.laba5;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,6 +25,13 @@ public class UserManagementController {
     private void initialize() {
         initializeTable();
         loadUsersData();
+
+        // Устанавливаем минимальные размеры когда сцена готова
+        Platform.runLater(() -> {
+            Stage stage = (Stage) usersTable.getScene().getWindow();
+            stage.setMinWidth(1200);
+            stage.setMinHeight(800);
+        });
     }
 
     private void initializeTable() {
